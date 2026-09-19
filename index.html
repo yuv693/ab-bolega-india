@@ -86,7 +86,7 @@
             <!-- Live Feedback Status -->
             <div id="status-box" class="w-full max-w-md bg-slate-900/50 border border-slate-800 rounded-xl p-3 text-center mb-6 text-xs text-slate-300">
                 <i class="fa-solid fa-volume-high text-orange-400 mr-1"></i>
-                <span id="transcript-msg">Sun raha hu... 'Saurashtra Exp 3AC ticket'</span>
+                <span id="transcript-msg">Sun raha hu... Train ka naam ya booking bole</span>
             </div>
 
             <!-- Live GPS & Train Status Panel -->
@@ -96,11 +96,11 @@
                     Live GPS & Train Status :
                 </div>
                 <div class="text-slate-300 flex justify-between">
-                    <span>train: Saurashtra Express (19016)</span>
-                    <span class="text-green-400 font-semibold">Running on time</span>
+                    <span id="display-train">train: Saurashtra Express (19016)</span>
+                    <span class="text-green-400 font-semibold" id="display-status">Running on time</span>
                 </div>
                 <div class="text-slate-300 flex justify-between">
-                    <span>Class Selected: 3AC</span>
+                    <span id="display-class">Class Selected: 3AC</span>
                     <span class="text-orange-400 font-semibold">Fare: ₹1150</span>
                 </div>
                 <div class="text-slate-400 text-[11px]">Mode: Running Train Booking</div>
@@ -123,6 +123,7 @@
             const micText = document.getElementById('mic-text');
             const micIcon = document.getElementById('mic-icon');
             const transcriptMsg = document.getElementById('transcript-msg');
+            const displayTrain = document.getElementById('display-train');
             
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
                 alert("Speech recognition is not supported in this browser. Try Chrome!");
@@ -131,7 +132,6 @@
 
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             const recognition = new SpeechRecognition();
-            
             recognition.lang = 'hi-IN'; // Supports Hindi/English mix
 
             if (!isRecording) {
@@ -145,17 +145,15 @@
                 isRecording = true;
                 micText.innerText = "Sun raha hu...";
                 micIcon.classList.add('animate-bounce');
-                transcriptMsg.innerText = "Listening for train details...";
+                transcriptMsg.innerText = "Listening...";
             };
 
             recognition.onresult = function(event) {
                 const speechToText = event.results[0][0].transcript;
                 transcriptMsg.innerText = `Aapne bola: "${speechToText}"`;
                 
-                // Auto trigger booking simulation with spoken text if needed
-                if(speechToText.toLowerCase().includes('book') || speechToText.toLowerCase().includes('ticket')) {
-                    setTimeout(bookTicket, 1000);
-                }
+                // Dynamically update train info based on speech
+                displayTrain.innerText = `train: ${speechToText}`;
             };
 
             recognition.onerror = function(event) {
@@ -174,40 +172,18 @@
             document.getElementById('mic-icon').classList.remove('animate-bounce');
         }
 
-        async function bookTicket() {
+        function bookTicket() {
             const irctc_id = document.getElementById('irctc_id').value;
             const statusMsg = document.getElementById('transcript-msg');
+            const trainName = document.getElementById('display-train').innerText;
 
             if(!irctc_id) {
                 alert("Please enter IRCTC User ID");
                 return;
             }
 
-            statusMsg.innerText = "Processing booking via server...";
-
-            try {
-                const response = await fetch('/book', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        irctc_id: irctc_id,
-                        train_no: "19016",
-                        name: "Rahul",
-                        age: 28
-                    })
-                });
-
-                const data = await response.json();
-                if(data.status === "success") {
-                    statusMsg.innerHTML = `<span class="text-green-400 font-bold">${data.message}</span>`;
-                    alert(data.message);
-                } else {
-                    statusMsg.innerHTML = `<span class="text-red-400">${data.message}</span>`;
-                }
-            } catch(err) {
-                statusMsg.innerText = "Connection error with server!";
-                console.error(err);
-            }
+            statusMsg.innerHTML = `<span class="text-green-400 font-bold">Ticket booked successfully via IRCTC ID: ${irctc_id} for ${trainName}! Fare: ₹1150</span>`;
+            alert(`Ticket booked successfully for ${trainName}!`);
         }
     </script>
 </body>
