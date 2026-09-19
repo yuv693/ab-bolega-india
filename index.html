@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ab Bolega India - Chalu Train Booking</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #ffffff;
+            color: #333;
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        h1 { color: #ff9933; font-size: 1.5rem; margin-bottom: 5px; }
+        .tagline { color: #008000; font-weight: bold; font-size: 0.9rem; margin-bottom: 15px; }
+        .irctc-box {
+            background: #f1f1f1;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.85rem;
+        }
+        .irctc-box input {
+            width: 80%;
+            padding: 5px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .voice-wave {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            height: 50px;
+            margin: 20px 0;
+        }
+        .bar {
+            width: 6px;
+            background: #ff3333;
+            border-radius: 3px;
+            animation: wave 1.2s infinite ease-in-out;
+        }
+        .bar:nth-child(2) { animation-delay: 0.1s; }
+        .bar:nth-child(3) { animation-delay: 0.2s; }
+        .bar:nth-child(4) { animation-delay: 0.3s; }
+        .bar:nth-child(5) { animation-delay: 0.4s; }
+        @keyframes wave {
+            0%, 100% { height: 10px; }
+            50% { height: 45px; }
+        }
+        .mic-btn {
+            background: #ff3333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255,51,51,0.4);
+        }
+        .pay-btn {
+            display: block;
+            background: #28a745;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>🚆 Ab Bolega India</h1>
+        <div class="tagline">Chalu train mein booking available hai!</div>
+
+        <div class="irctc-box">
+            <label for="irctcId"><strong>IRCTC User ID / Signup:</strong></label><br>
+            <input type="text" id="irctcId" placeholder="IRCTC ID enter karein" value="RahulRail2026">
+        </div>
+
+        <div class="voice-wave">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <button class="mic-btn" onclick="startListening()">🎙️ Boliye (Speak)</button>
+
+        <div id="status" style="margin-top: 15px; font-size: 0.85rem; color: #555;">
+            📍 GPS: Saurashtra Exp (Running) <br>
+            👤 Passenger: Rahul Sharma (28)
+        </div>
+
+        <a href="upi://pay?pa=irctc@okaxis&pn=AbBolegaIndia&am=1150&cu=INR" class="pay-btn">
+            💳 PAY VIA UPI (₹1150)
+        </a>
+    </div>
+
+    <script>
+        function startListening() {
+            document.getElementById("status").innerHTML = "🎙️ Sun raha hu... 'Saurashtra Exp 3AC ticket'";
+        }
+    </script>
+
+</body>
+</html>
