@@ -41,7 +41,6 @@
 
         <!-- Voice Booking Box -->
         <div class="bg-slate-900 text-slate-100 rounded-2xl p-3 shadow-lg border border-orange-400/40 text-center my-1">
-            <!-- Bada aur Bold Slogan -->
             <h1 class="text-[12px] font-black text-orange-400 tracking-wider leading-snug drop-shadow mb-0.5">
                 CHALU TRAIN MEIN BOOKING AVAILABLE HAI!
             </h1>
@@ -99,16 +98,34 @@
             </div>
         </div>
 
-        <!-- PAYMENT BUTTON -->
+        <!-- PAYMENT BUTTON & ORIGINAL LOGOS -->
         <div>
             <button onclick="proceedToRealBooking()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-3 rounded-xl shadow-lg flex items-center justify-center gap-2 text-xs tracking-wide transition active:scale-95">
                 <i class="fa-solid fa-credit-card"></i> PAY VIA UPI & BOOK
             </button>
-            <div class="flex items-center justify-center space-x-2 mt-1.5 text-[9px] text-white">
-                <span class="bg-orange-700 px-1.5 py-0.5 rounded font-bold">GPay</span>
-                <span class="bg-orange-700 px-1.5 py-0.5 rounded font-bold">Paytm</span>
-                <span class="bg-orange-700 px-1.5 py-0.5 rounded font-bold">PhonePe</span>
-                <span class="bg-orange-700 px-1.5 py-0.5 rounded font-bold">BHIM</span>
+            
+            <!-- Original Colored Payment App Logos Container -->
+            <div class="flex items-center justify-center space-x-3 mt-1.5 bg-orange-700/60 py-1.5 px-2 rounded-xl border border-orange-600">
+                <!-- Google Pay Logo / Icon -->
+                <div class="flex items-center space-x-1 bg-white px-1.5 py-0.5 rounded shadow-sm">
+                    <i class="fa-brands fa-google text-blue-600 text-[10px]"></i>
+                    <span class="text-[9px] font-bold text-slate-800">GPay</span>
+                </div>
+                <!-- Paytm Logo / Icon -->
+                <div class="flex items-center space-x-1 bg-white px-1.5 py-0.5 rounded shadow-sm">
+                    <i class="fa-solid fa-wallet text-sky-500 text-[10px]"></i>
+                    <span class="text-[9px] font-bold text-blue-900">Paytm</span>
+                </div>
+                <!-- PhonePe Logo / Icon -->
+                <div class="flex items-center space-x-1 bg-white px-1.5 py-0.5 rounded shadow-sm">
+                    <i class="fa-solid fa-mobile-screen-button text-purple-600 text-[10px]"></i>
+                    <span class="text-[9px] font-bold text-purple-700">PhonePe</span>
+                </div>
+                <!-- BHIM UPI Logo / Icon -->
+                <div class="flex items-center space-x-1 bg-white px-1.5 py-0.5 rounded shadow-sm">
+                    <i class="fa-solid fa-shield-halved text-orange-600 text-[10px]"></i>
+                    <span class="text-[9px] font-bold text-slate-800">BHIM</span>
+                </div>
             </div>
         </div>
 
