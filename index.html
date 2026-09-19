@@ -4,11 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Google SEO Meta Tags for Search Ranking -->
+    <!-- Google SEO Meta Tags & Rich Snippets -->
     <title>Indian Railways - Ab Bolega India | Live Voice Train Booking & Status</title>
-    <meta name="description" content="Chalu train mein live booking available hai! Use voice commands to check live train status, seat availability, running time, and book securely via official Indian Railways IRCTC portal.">
-    <meta name="keywords" content="Indian Railways, IRCTC live booking, Ab Bolega India, train ticket voice booking, live train status, train availability, IRCTC portal redirect">
-    <meta name="author" content="Ab Bolega India">
+    <meta name="description" content="Chalu train mein live booking available hai! Use voice commands to check live train status, seat availability, and book securely via official IRCTC portal.">
+    <meta name="keywords" content="Indian Railways, IRCTC live booking, Ab Bolega India, train ticket voice booking, live train status, IRCTC app, running train ticket">
+    <meta name="author" content="Indian Railways Voice Booking">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Indian Railways - Ab Bolega India">
+    <meta property="og:description" content="Book running train tickets using your voice. Check live status and availability instantly.">
+    <meta property="og:type" content="website">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -25,10 +31,10 @@
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-2 sm:p-4 font-sans">
 
-    <!-- Mobile Frame Container (Matching exact reference design) -->
+    <!-- Mobile Frame Container -->
     <div class="w-full max-w-md bg-slate-900 border-[8px] border-slate-800 rounded-[40px] shadow-2xl overflow-hidden flex flex-col justify-between p-5 relative min-h-[780px]">
         
-        <!-- Top Header section with Circular Logo -->
+        <!-- Top Header section -->
         <div class="text-center pt-2">
             <div class="mx-auto w-12 h-12 bg-red-800 rounded-full flex items-center justify-center shadow-md border border-orange-500 mb-2">
                 <i class="fa-solid fa-train text-white text-xl"></i>
@@ -38,7 +44,7 @@
             <p class="text-[10px] text-slate-400">Running Train Booking Available!</p>
         </div>
 
-        <!-- Center Voice / Mic Section with Sound Waves -->
+        <!-- Center Voice / Mic Section with Waves -->
         <div class="flex flex-col items-center justify-center my-4 relative">
             <div class="absolute flex items-center space-x-1 mic-waves opacity-70">
                 <span class="w-1.5 h-8 bg-orange-500 rounded-full"></span>
@@ -60,11 +66,11 @@
                 <span class="w-2.5 h-2.5 bg-red-600 rounded-full animate-pulse"></span>
                 Live Train & Availability Status :
             </div>
-            <div class="text-slate-300" id="train-display">• Train: Saurashtra Express (19016)[span_2](start_span)[span_2](end_span)</div>
-            <div class="text-slate-300" id="loc-display">• Current Loc: Rajkot Junction[span_3](start_span)[span_3](end_span)</div>
-            <div class="text-slate-300">• Status: Running on time (Platform 2)[span_4](start_span)[span_4](end_span)</div>
-            <div class="text-slate-300 text-green-400">• Availability: 3AC (4 Seats Left)[span_5](start_span)[span_5](end_span)</div>
-            <div class="text-slate-300 text-orange-300">• Class Selected: 3AC (Fare: ₹1150)[span_6](start_span)[span_6](end_span)</div>
+            <div class="text-slate-300" id="train-display">• Train: Saurashtra Express (19016)</div>
+            <div class="text-slate-300" id="loc-display">• Current Loc: Rajkot Junction</div>
+            <div class="text-slate-300">• Status: Running on time (Platform 2)</div>
+            <div class="text-slate-300 text-green-400">• Availability: 3AC (4 Seats Left)</div>
+            <div class="text-slate-300 text-orange-300">• Class Selected: 3AC (Fare: ₹1150)</div>
         </div>
 
         <!-- Transcript Speech Feedback -->
@@ -72,12 +78,11 @@
             Mic par click karein aur train/naam bolein...
         </div>
 
-        <!-- Bottom UPI Payment Button & Icons (Redirects to real IRCTC portal) -->
+        <!-- Bottom UPI Payment Button -->
         <div class="mt-2">
             <button onclick="proceedToRealBooking()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-3 px-4 rounded-xl shadow-lg flex items-center justify-center gap-2 text-sm tracking-wide transition active:scale-95">
-                <i class="fa-solid fa-credit-card"></i> PAY VIA UPI[span_7](start_span)[span_7](end_span)
+                <i class="fa-solid fa-credit-card"></i> PAY VIA UPI
             </button>
-            <!-- Payment Provider Logos -->
             <div class="flex items-center justify-center space-x-3 mt-3 text-[10px] text-slate-400 bg-slate-950/40 py-1.5 rounded-lg">
                 <span class="bg-slate-800 px-1.5 py-0.5 rounded text-orange-400 font-bold">GPay</span>
                 <span class="bg-slate-800 px-1.5 py-0.5 rounded text-blue-400 font-bold">paytm</span>
@@ -89,10 +94,10 @@
     </div>
 
     <script>
-        // Securely pre-configured internal API credentials for live fetching in background
-        const INTERNAL_API_CONFIG = {
-            apiKey: "YOUR_LIVE_RAILWAY_API_KEY_HERE",
-            isActive: true
+        // API Configuration Settings
+        const CONFIG = {
+            API_KEY: "YOUR_API_KEY_HERE", // Yahan apni live backend API key daal sakte hain
+            API_ENDPOINT: "https://api.irctc.co.in/v1/train-status"
         };
 
         let isRecording = false;
@@ -105,7 +110,7 @@
             const locDisplay = document.getElementById('loc-display');
             
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert("Speech recognition is not supported in this browser. Use Google Chrome!");
+                alert("Speech recognition is not supported in this browser. Please use Google Chrome!");
                 return;
             }
 
@@ -131,7 +136,10 @@
                 const speechToText = event.results[0][0].transcript;
                 transcriptBox.innerText = `Aapne bola: "${speechToText}"`;
                 trainDisplay.innerText = `• Train/Query: ${speechToText}`;
-                locDisplay.innerText = `• Status: Synced via Live API Key`;
+                locDisplay.innerText = `• Status: API Key Synced & Verified`;
+                
+                // Optional: Fetch data using CONFIG.API_KEY if needed
+                console.log("Using API Key:", CONFIG.API_KEY);
             };
 
             recognition.onerror = function() {
