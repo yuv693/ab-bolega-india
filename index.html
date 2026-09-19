@@ -7,111 +7,80 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @keyframes pulse-ring {
-            0% { transform: scale(0.95); opacity: 0.8; }
-            50% { transform: scale(1.1); opacity: 0.4; }
-            100% { transform: scale(0.95); opacity: 0.8; }
+        @keyframes sound-waves {
+            0% { opacity: 0.3; transform: scale(0.95); }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 0.3; transform: scale(0.95); }
         }
-        .mic-glow {
-            animation: pulse-ring 2s infinite ease-in-out;
+        .mic-waves {
+            animation: sound-waves 1.5s infinite ease-in-out;
         }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-2 sm:p-4 font-sans">
 
-    <!-- Top Indian Railways Header -->
-    <header class="bg-orange-600 border-b border-orange-700 shadow-lg px-4 py-3 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-            <div class="bg-white p-2 rounded-full shadow-inner text-orange-600 font-bold flex items-center justify-center w-10 h-10">
-                <i class="fa-solid fa-train text-lg"></i>
-            </div>
-            <div>
-                <h1 class="text-lg font-extrabold tracking-wide text-white">INDIAN RAILWAYS</h1>
-                <p class="text-xs text-orange-100 font-medium">CHALU TRAIN MEIN BOOKING AVAILABLE HAI!</p>
-            </div>
-        </div>
-        <div class="hidden md:flex items-center space-x-2 text-xs bg-orange-700 px-3 py-1.5 rounded-lg text-orange-200">
-            <i class="fa-solid fa-headset"></i>
-            <span>Voice Assistant Active</span>
-        </div>
-    </header>
-
-    <!-- Main Content Grid -->
-    <div class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+    <!-- Mobile Frame Container -->
+    <div class="w-full max-w-md bg-slate-900 border-[8px] border-slate-800 rounded-[40px] shadow-2xl overflow-hidden flex flex-col justify-between p-5 relative min-h-[750px]">
         
-        <!-- Left Sidebar: Recent Bookings -->
-        <div class="lg:col-span-1 bg-slate-800/80 border border-slate-700 rounded-2xl p-4 shadow-xl backdrop-blur-md">
-            <h2 class="text-sm font-bold uppercase tracking-wider text-orange-400 mb-3 flex items-center gap-2">
-                <i class="fa-solid fa-clock-rotate-left"></i> Recent Bookings
-            </h2>
-            <div id="recent-bookings-list" class="space-y-3">
-                <div class="bg-slate-900/60 p-3 rounded-xl border border-slate-700/50 text-xs">
-                    <div class="font-semibold text-slate-200">Saurashtra Express (19016)</div>
-                    <div class="text-slate-400 mt-1">Status: Running on time</div>
-                    <div class="text-orange-300 mt-1 font-mono">Fare: ₹1150</div>
-                </div>
+        <!-- Top Header section -->
+        <div class="text-center pt-2">
+            <!-- Indian Railways Logo Circle -->
+            <div class="mx-auto w-12 h-12 bg-red-800 rounded-full flex items-center justify-center shadow-md border border-orange-500 mb-2">
+                <i class="fa-solid fa-train text-white text-xl"></i>
             </div>
+            <h1 class="text-lg font-black tracking-wider text-white">INDIAN RAILWAYS</h1>
+            <p class="text-[11px] font-bold text-orange-400 tracking-wide mt-0.5">CHALU TRAIN MEIN BOOKING AVAILABLE HAI!</p>
+            <p class="text-[10px] text-slate-400">Running Train Booking Available!</p>
         </div>
 
-        <!-- Center/Right Main App Box -->
-        <div class="lg:col-span-3 bg-gradient-to-b from-slate-800 to-slate-900 border border-slate-700 rounded-3xl shadow-2xl p-6 md:p-8 flex flex-col items-center">
-            
-            <div class="text-center mb-6">
-                <h2 class="text-2xl font-black text-orange-500 tracking-wide">Ab Bolega India</h2>
-                <p class="text-xs text-slate-400 mt-1">Bolkar apni train ticket book karein ya status check karein</p>
+        <!-- Center Voice / Mic Section with Sound Waves -->
+        <div class="flex flex-col items-center justify-center my-4 relative">
+            <!-- Simulated Audio Waves Background -->
+            <div class="absolute flex items-center space-x-1 mic-waves opacity-70">
+                <span class="w-1.5 h-8 bg-orange-500 rounded-full"></span>
+                <span class="w-1.5 h-14 bg-orange-500 rounded-full"></span>
+                <span class="w-1.5 h-20 bg-orange-500 rounded-full"></span>
+                <span class="w-1.5 h-14 bg-orange-500 rounded-full"></span>
+                <span class="w-1.5 h-8 bg-orange-500 rounded-full"></span>
             </div>
 
-            <!-- IRCTC ID Input Section -->
-            <div class="w-full max-w-md bg-slate-900/80 border border-slate-700 p-4 rounded-2xl shadow-inner mb-6">
-                <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
-                    <i class="fa-solid fa-user-shield text-orange-400 mr-1"></i> IRCTC User ID / Signup:
-                </label>
-                <input type="text" id="irctc_id" value="RahulRail2026" 
-                    class="w-full bg-slate-800 border border-slate-600 rounded-xl px-4 py-2.5 text-white font-medium focus:outline-none focus:border-orange-500 text-sm">
-            </div>
-
-            <!-- Voice Interaction Section -->
-            <div class="relative flex flex-col items-center my-4">
-                <!-- Pulsing Glow Ring behind Mic -->
-                <div class="absolute w-36 h-36 bg-orange-500/20 rounded-full mic-glow pointer-events-none"></div>
-
-                <!-- Big Click to Speak Button -->
-                <button id="mic-btn" onclick="toggleVoiceRecording()" 
-                    class="relative z-10 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-bold py-4 px-8 rounded-full shadow-lg flex items-center gap-3 transition transform active:scale-95">
-                    <i class="fa-solid fa-microphone text-xl" id="mic-icon"></i>
-                    <span class="text-base tracking-wide" id="mic-text">Boliye (Speak)</span>
-                </button>
-            </div>
-
-            <!-- Live Feedback Status -->
-            <div id="status-box" class="w-full max-w-md bg-slate-900/50 border border-slate-800 rounded-xl p-3 text-center mb-6 text-xs text-slate-300">
-                <i class="fa-solid fa-volume-high text-orange-400 mr-1"></i>
-                <span id="transcript-msg">Sun raha hu... Train ka naam ya booking bole</span>
-            </div>
-
-            <!-- Live GPS & Train Status Panel -->
-            <div class="w-full max-w-md bg-slate-900 border border-slate-700/80 rounded-2xl p-4 mb-6 shadow-inner text-xs space-y-2">
-                <div class="font-bold text-slate-200 flex items-center gap-2 border-b border-slate-800 pb-2">
-                    <span class="w-2.5 h-2.5 bg-green-500 rounded-full animate-ping"></span>
-                    Live GPS & Train Status :
-                </div>
-                <div class="text-slate-300 flex justify-between">
-                    <span id="display-train">train: Saurashtra Express (19016)</span>
-                    <span class="text-green-400 font-semibold" id="display-status">Running on time</span>
-                </div>
-                <div class="text-slate-300 flex justify-between">
-                    <span id="display-class">Class Selected: 3AC</span>
-                    <span class="text-orange-400 font-semibold">Fare: ₹1150</span>
-                </div>
-                <div class="text-slate-400 text-[11px]">Mode: Running Train Booking</div>
-            </div>
-
-            <!-- Action Booking Button -->
-            <button onclick="bookTicket()" 
-                class="w-full max-w-md bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold py-3.5 px-6 rounded-2xl shadow-lg flex items-center justify-center gap-2 text-sm tracking-wide transition active:scale-95">
-                <i class="fa-solid fa-credit-card"></i> PAY VIA UPI (₹1150)
+            <!-- Big Clickable Mic Button -->
+            <button onclick="toggleVoiceRecording()" class="relative z-10 w-24 h-24 bg-slate-900/90 border-2 border-orange-500/60 rounded-full flex flex-col items-center justify-center shadow-xl hover:scale-105 active:scale-95 transition">
+                <i class="fa-solid fa-microphone text-orange-400 text-3xl mb-1" id="mic-icon"></i>
             </button>
+            <span id="mic-label" class="text-[11px] font-bold tracking-widest text-orange-400 mt-3 uppercase"><i class="fa-solid fa-microphone-lines mr-1"></i> TAP TO SPEAK</span>
+        </div>
 
+        <!-- Live Status Display Box (Exact Match to Image) -->
+        <div class="bg-slate-950/80 border border-slate-800 rounded-2xl p-3.5 shadow-inner text-xs space-y-2">
+            <div class="font-bold text-slate-200 flex items-center gap-2 border-b border-slate-800/80 pb-1.5">
+                <span class="w-2.5 h-2.5 bg-red-600 rounded-full animate-pulse"></span>
+                Live Train & Availability Status :
+            </div>
+            <div class="text-slate-300">• Train: Saurashtra Express (19016)[span_1](start_span)[span_1](end_span)</div>
+            <div class="text-slate-300" id="loc-display">• Current Loc: Rajkot Junction[span_2](start_span)[span_2](end_span)</div>
+            <div class="text-slate-300">• Status: Running on time (Platform 2)[span_3](start_span)[span_3](end_span)</div>
+            <div class="text-slate-300 text-green-400">• Availability: 3AC (4 Seats Left)[span_4](start_span)[span_4](end_span)</div>
+            <div class="text-slate-300 text-orange-300">• Class Selected: 3AC (Fare: ₹1150)[span_5](start_span)[span_5](end_span)</div>
+        </div>
+
+        <!-- Transcript Speech Feedback -->
+        <div id="transcript-box" class="text-center text-[11px] text-slate-400 h-5">
+            Mic par click karein aur train ka naam bolein...
+        </div>
+
+        <!-- Bottom UPI Payment Button & Icons -->
+        <div class="mt-2">
+            <button onclick="bookTicket()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-3 px-4 rounded-xl shadow-lg flex items-center justify-center gap-2 text-sm tracking-wide transition active:scale-95">
+                <i class="fa-solid fa-credit-card"></i> PAY VIA UPI[span_6](start_span)[span_6](end_span)
+            </button>
+            <!-- Payment Provider Logos -->
+            <div class="flex items-center justify-center space-x-3 mt-3 text-[10px] text-slate-400 bg-slate-950/40 py-1.5 rounded-lg">
+                <span class="bg-slate-800 px-1.5 py-0.5 rounded text-orange-400 font-bold">GPay</span>
+                <span class="bg-slate-800 px-1.5 py-0.5 rounded text-blue-400 font-bold">paytm</span>
+                <span class="bg-slate-800 px-1.5 py-0.5 rounded text-purple-400 font-bold">PhonePe</span>
+                <span class="bg-slate-800 px-1.5 py-0.5 rounded text-yellow-500 font-bold">BHIM</span>
+            </div>
         </div>
 
     </div>
@@ -120,19 +89,19 @@
         let isRecording = false;
 
         function toggleVoiceRecording() {
-            const micText = document.getElementById('mic-text');
+            const micLabel = document.getElementById('mic-label');
             const micIcon = document.getElementById('mic-icon');
-            const transcriptMsg = document.getElementById('transcript-msg');
-            const displayTrain = document.getElementById('display-train');
+            const transcriptBox = document.getElementById('transcript-box');
+            const locDisplay = document.getElementById('loc-display');
             
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert("Speech recognition is not supported in this browser. Try Chrome!");
+                alert("Speech recognition is not supported in this browser. Use Google Chrome!");
                 return;
             }
 
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             const recognition = new SpeechRecognition();
-            recognition.lang = 'hi-IN'; // Supports Hindi/English mix
+            recognition.lang = 'hi-IN';
 
             if (!isRecording) {
                 recognition.start();
@@ -143,21 +112,19 @@
 
             recognition.onstart = function() {
                 isRecording = true;
-                micText.innerText = "Sun raha hu...";
-                micIcon.classList.add('animate-bounce');
-                transcriptMsg.innerText = "Listening...";
+                micLabel.innerText = "SUN RAHA HU...";
+                micIcon.classList.add('fa-spin');
+                transcriptBox.innerText = "Listening to your voice command...";
             };
 
             recognition.onresult = function(event) {
                 const speechToText = event.results[0][0].transcript;
-                transcriptMsg.innerText = `Aapne bola: "${speechToText}"`;
-                
-                // Dynamically update train info based on speech
-                displayTrain.innerText = `train: ${speechToText}`;
+                transcriptBox.innerText = `Aapne bola: "${speechToText}"`;
+                locDisplay.innerText = `• Command / Loc: ${speechToText}`;
             };
 
-            recognition.onerror = function(event) {
-                transcriptMsg.innerText = "Voice capture error. Try again.";
+            recognition.onerror = function() {
+                transcriptBox.innerText = "Voice error. Phir se tap karein.";
                 resetMicState();
             };
 
@@ -168,22 +135,12 @@
 
         function resetMicState() {
             isRecording = false;
-            document.getElementById('mic-text').innerText = "Boliye (Speak)";
-            document.getElementById('mic-icon').classList.remove('animate-bounce');
+            document.getElementById('mic-label').innerHTML = `<i class="fa-solid fa-microphone-lines mr-1"></i> TAP TO SPEAK`;
+            document.getElementById('mic-icon').classList.remove('fa-spin');
         }
 
         function bookTicket() {
-            const irctc_id = document.getElementById('irctc_id').value;
-            const statusMsg = document.getElementById('transcript-msg');
-            const trainName = document.getElementById('display-train').innerText;
-
-            if(!irctc_id) {
-                alert("Please enter IRCTC User ID");
-                return;
-            }
-
-            statusMsg.innerHTML = `<span class="text-green-400 font-bold">Ticket booked successfully via IRCTC ID: ${irctc_id} for ${trainName}! Fare: ₹1150</span>`;
-            alert(`Ticket booked successfully for ${trainName}!`);
+            alert("Simulated UPI Payment Gateway opened for ₹1150. Booking Confirmed successfully!");
         }
     </script>
 </body>
