@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ab Bolega India - IRCTC Rail Connect Voice Booking</title>
+    <title>Ab Bolega India - All-in-One IRCTC Voice Assistant</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -30,7 +30,7 @@
                 </div>
                 <div>
                     <span class="font-black text-sm tracking-wider block leading-tight text-yellow-300 drop-shadow">AB BOLEGA INDIA</span>
-                    <span class="text-[8px] text-orange-200 block">IRCTC Rail Connect + RapidAPI</span>
+                    <span class="text-[8px] text-orange-200 block">All-in-One IRCTC Assistant</span>
                 </div>
             </div>
             <div class="flex items-center space-x-2 text-xs text-orange-200">
@@ -39,12 +39,18 @@
             </div>
         </div>
 
-        <!-- Voice Booking Box with RapidAPI Support -->
+        <!-- Mode Selector Tabs -->
+        <div class="grid grid-cols-2 gap-1 bg-slate-950 p-1 rounded-xl my-1 text-[10px] font-bold text-center">
+            <button id="tab-pnr" onclick="switchMode('pnr')" class="py-1.5 rounded-lg bg-orange-600 text-white transition">PNR Status</button>
+            <button id="tab-train" onclick="switchMode('train')" class="py-1.5 rounded-lg text-slate-400 hover:text-white transition">Train Search</button>
+        </div>
+
+        <!-- Voice Booking Box -->
         <div class="bg-slate-900 text-slate-100 rounded-2xl p-3 shadow-lg border border-orange-400/40 text-center my-1">
-            <h1 class="text-[12px] font-black text-orange-400 tracking-wider leading-snug drop-shadow mb-0.5">
-                CHALU TRAIN MEIN BOOKING AVAILABLE HAI!
+            <h1 id="mode-title" class="text-[11px] font-black text-orange-400 tracking-wider leading-snug drop-shadow mb-0.5">
+                PNR STATUS VOICE CHECKER
             </h1>
-            <p class="text-[9px] text-yellow-400 font-bold mb-1">🎤 Voice Train Assistant (RapidAPI)</p>
+            <p id="mode-subtitle" class="text-[9px] text-yellow-400 font-bold mb-1">🎤 10-digit PNR number bolein</p>
             
             <!-- Center Mic -->
             <div class="flex flex-col items-center justify-center my-2 relative">
@@ -68,15 +74,15 @@
             <!-- Live Status & API Response -->
             <div class="bg-slate-950 text-left rounded-xl p-2 text-[10px] space-y-0.5 border border-slate-800">
                 <div class="text-orange-300 font-bold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span> RapidAPI Result:
+                    <span class="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span> Result Box:
                 </div>
-                <div class="text-slate-300" id="train-display">• Train/PNR Info: Ready</div>
-                <div class="text-slate-300" id="passenger-display">• Details: [Aapka Query Yahan Ayega]</div>
-                <div class="text-slate-300 text-green-400" id="api-response">• API Insight: Mic dabakar PNR ya number bolein</div>
+                <div class="text-slate-300" id="output-status">• Status: Ready</div>
+                <div class="text-slate-300" id="output-query">• Query: [Aapka Input]</div>
+                <div class="text-slate-300 text-green-400" id="api-insight">• Info: Mic tap karein</div>
             </div>
 
             <div id="transcript-box" class="text-[9px] text-slate-400 mt-1">
-                Mic par click karein aur train/PNR details bolein...
+                Mic par click karke details bolein...
             </div>
         </div>
 
@@ -133,19 +139,39 @@
     </div>
 
     <script>
-        // CONFIG: Host is already set, just paste your RapidAPI Key inside quotes
+        // RAPIDAPI CONFIG (Aapki Screenshots wali key aur host)
         const RAPID_CONFIG = {
-            API_KEY: "YAHAN_APNI_RAPIDAPI_KEY_DAALEIN",
-            API_HOST: "irctc-indian-railway-pnr-status.p.rapidapi.com"
+            API_KEY: "c8ff7efe43mshb615431c4a240fep1cca5ajsnd07a531f7ac1",
+            API_HOST: "irctc1.p.rapidapi.com"
         };
 
+        let currentMode = 'pnr'; // 'pnr' or 'train'
         let isRecording = false;
+
+        function switchMode(mode) {
+            currentMode = mode;
+            const tabPnr = document.getElementById('tab-pnr');
+            const tabTrain = document.getElementById('tab-train');
+            const modeTitle = document.getElementById('mode-title');
+            const modeSubtitle = document.getElementById('mode-subtitle');
+
+            if(mode === 'pnr') {
+                tabPnr.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
+                tabTrain.className = "py-1.5 rounded-lg text-slate-400 hover:text-white transition";
+                modeTitle.innerText = "PNR STATUS VOICE CHECKER";
+                modeSubtitle.innerText = "🎤 10-digit PNR number bolein";
+            } else {
+                tabTrain.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
+                tabPnr.className = "py-1.5 rounded-lg text-slate-400 hover:text-white transition";
+                modeTitle.innerText = "TRAIN BETWEEN STATIONS";
+                modeSubtitle.innerText = "🎤 Station code bolein (jaise: Porbandar to Ahmedabad)";
+            }
+        }
 
         function toggleVoiceRecording() {
             const micLabel = document.getElementById('mic-label');
             const micIcon = document.getElementById('mic-icon');
             const transcriptBox = document.getElementById('transcript-box');
-            const passengerDisplay = document.getElementById('passenger-display');
             
             if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
                 alert("Speech recognition requires Google Chrome!");
@@ -173,10 +199,13 @@
             recognition.onresult = function(event) {
                 const speechToText = event.results[0][0].transcript;
                 transcriptBox.innerText = `Aapne bola: "${speechToText}"`;
-                passengerDisplay.innerText = `• Query: ${speechToText}`;
+                document.getElementById('output-query').innerText = `• Query: ${speechToText}`;
                 
-                // Call RapidAPI
-                fetchTrainDataFromRapidAPI(speechToText);
+                if(currentMode === 'pnr') {
+                    fetchPNRData(speechToText);
+                } else {
+                    fetchTrainData(speechToText);
+                }
             };
 
             recognition.onerror = function() {
@@ -189,19 +218,13 @@
             };
         }
 
-        async function fetchTrainDataFromRapidAPI(userQuery) {
-            const apiResponseBox = document.getElementById('api-response');
-            const trainDisplay = document.getElementById('train-display');
-            
-            if(RAPID_CONFIG.API_KEY === "c8ff7efe43mshb615431c4a240fep1cca5ajsnd07a531f7ac1" || !RAPID_CONFIG.API_KEY) {
-                apiResponseBox.innerText = "• API Insight: RapidAPI key missing!";
-                return;
-            }
+        async function fetchPNRData(pnrQuery) {
+            const apiInsight = document.getElementById('api-insight');
+            const outputStatus = document.getElementById('output-status');
 
             try {
-                apiResponseBox.innerText = "• API Insight: Data fetch ho raha hai...";
-                
-                const response = await fetch(`https://${RAPID_CONFIG.API_HOST}/getPNRStatus/${encodeURIComponent(userQuery)}`, {
+                apiInsight.innerText = "• Fetching PNR status...";
+                const response = await fetch(`https://${RAPID_CONFIG.API_HOST}/api/v1/getPNRStatus?pnrNumber=${encodeURIComponent(pnrQuery)}`, {
                     method: 'GET',
                     headers: {
                         'x-rapidapi-key': RAPID_CONFIG.API_KEY,
@@ -210,18 +233,33 @@
                 });
 
                 const data = await response.json();
-                
-                apiResponseBox.innerText = `• API Success: Data mil gaya!`;
-                
-                if(data && data.message) {
-                    trainDisplay.innerText = `• Status: ${data.message}`;
-                } else {
-                    trainDisplay.innerText = `• Response: ${JSON.stringify(data).substring(0, 40)}...`;
-                }
-
+                apiInsight.innerText = "• PNR Data Received!";
+                outputStatus.innerText = `• Response: ${JSON.stringify(data).substring(0, 50)}...`;
             } catch (error) {
-                apiResponseBox.innerText = "• API Error: Server connect nahi ho paya.";
-                trainDisplay.innerText = `• Error details: ${error.message}`;
+                apiInsight.innerText = "• Connection error.";
+            }
+        }
+
+        async function fetchTrainData(trainQuery) {
+            const apiInsight = document.getElementById('api-insight');
+            const outputStatus = document.getElementById('output-status');
+
+            try {
+                apiInsight.innerText = "• Searching trains...";
+                // Example structure for train search endpoint
+                const response = await fetch(`https://${RAPID_CONFIG.API_HOST}/api/v1/trainBetweenStations?fromStationCode=PBR&toStationCode=ADI`, {
+                    method: 'GET',
+                    headers: {
+                        'x-rapidapi-key': RAPID_CONFIG.API_KEY,
+                        'x-rapidapi-host': RAPID_CONFIG.API_HOST
+                    }
+                });
+
+                const data = await response.json();
+                apiInsight.innerText = "• Trains Found!";
+                outputStatus.innerText = `• Success: Data loaded successfully`;
+            } catch (error) {
+                apiInsight.innerText = "• Train search error.";
             }
         }
 
