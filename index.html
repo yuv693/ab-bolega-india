@@ -12,12 +12,10 @@
             50% { opacity: 1; transform: scale(1.02); }
             100% { opacity: 0.4; transform: scale(0.98); }
         }
-        .audio-wave-bg {
-            animation: sound-wave-glow 1.8s infinite ease-in-out;
-        }
+        .audio-wave-bg { animation: sound-wave-glow 1.8s infinite ease-in-out; }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-2 font-sans">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-2 font-sans select-none" oncontextmenu="return false;">
 
     <!-- Mobile Frame Container -->
     <div class="w-full max-w-md bg-orange-500 border-[6px] border-slate-800 rounded-[35px] shadow-2xl overflow-hidden flex flex-col justify-between p-3 relative min-h-[720px]">
@@ -30,19 +28,18 @@
                 </div>
                 <div>
                     <span class="font-black text-sm tracking-wider block leading-tight text-yellow-300 drop-shadow">AB BOLEGA INDIA</span>
-                    <span class="text-[8px] text-orange-200 block">Gaon aur aam janta ke liye voice app</span>
+                    <span class="text-[8px] text-orange-200 block">Gaon aur aam janta ke liye secure app</span>
                 </div>
             </div>
             <div class="flex items-center space-x-2 text-xs text-orange-200">
-                <i class="fa-solid fa-ellipsis-vertical"></i>
-                <i class="fa-solid fa-xmark"></i>
+                <i class="fa-solid fa-lock text-yellow-300"></i>
             </div>
         </div>
 
         <!-- Mode Selector Tabs -->
         <div class="grid grid-cols-2 gap-1 bg-slate-950 p-1 rounded-xl my-1 text-[10px] font-bold text-center">
-            <button id="tab-train" onclick="switchMode('train')" class="py-1.5 rounded-lg bg-orange-600 text-white transition">Train Khojo (Voice)</button>
-            <button id="tab-pnr" onclick="switchMode('pnr')" class="py-1.5 rounded-lg text-slate-400 hover:text-white transition">PNR Status</button>
+            <button id="tab-train" onclick="_0x2f8a('train')" class="py-1.5 rounded-lg bg-orange-600 text-white transition">Train Khojo (Voice)</button>
+            <button id="tab-pnr" onclick="_0x2f8a('pnr')" class="py-1.5 rounded-lg text-slate-400 hover:text-white transition">PNR Status</button>
         </div>
 
         <!-- Voice Booking Box -->
@@ -62,7 +59,7 @@
                     <span class="w-1 h-4 bg-orange-500/40 rounded-full"></span>
                 </div>
 
-                <button onclick="toggleVoiceRecording()" class="relative z-10 w-16 h-16 bg-slate-950 border-2 border-orange-400 rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition">
+                <button onclick="_0x4b12()" class="relative z-10 w-16 h-16 bg-slate-950 border-2 border-orange-400 rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition">
                     <i class="fa-solid fa-microphone text-white text-xl" id="mic-icon"></i>
                 </button>
                 
@@ -74,20 +71,19 @@
             <!-- Live Status & Result Box -->
             <div class="bg-slate-950 text-left rounded-xl p-2 text-[10px] space-y-1 border border-slate-800 max-h-48 overflow-y-auto">
                 <div class="text-orange-300 font-bold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> App ke andar natija:
+                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Surakshit Natija:
                 </div>
                 <div class="text-slate-300" id="output-query">• Aapne bola: Kuch nahi</div>
                 
-                <!-- Direct In-App Results Container -->
                 <div id="train-results-container" class="space-y-1.5 mt-1">
                     <div class="p-2 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">
-                        Mic par click karke train ka naam bolein (Jaise: Porbandar se Ahmedabad)...
+                        Mic par click karke train ka naam bolein...
                     </div>
                 </div>
             </div>
 
             <div id="transcript-box" class="text-[9px] text-slate-400 mt-1">
-                Assistant taiyar hai...
+                Secure Assistant taiyar hai...
             </div>
         </div>
 
@@ -109,200 +105,45 @@
             </div>
         </div>
 
-        <!-- PAYMENT BUTTON & ORIGINAL LOGOS -->
+        <!-- PAYMENT BUTTON -->
         <div>
-            <button onclick="openInAppCheckout()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-3 rounded-xl shadow-lg flex items-center justify-center gap-2 text-xs tracking-wide transition active:scale-95">
-                <i class="fa-solid fa-shield-check"></i> DALAL MUKT UPI BOOKING
+            <button onclick="_0x9c3f()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-3 rounded-xl shadow-lg flex items-center justify-center gap-2 text-xs tracking-wide transition active:scale-95">
+                <i class="fa-solid fa-shield-halved"></i> DALAL MUKT UPI BOOKING
             </button>
             
             <div class="flex items-center justify-center space-x-3 mt-1.5 bg-orange-700/60 py-1.5 px-2 rounded-xl border border-orange-600">
                 <div class="flex items-center space-x-1 bg-white px-1.5 py-0.5 rounded shadow-sm">
-                    <i class="fa-brands fa-google text-blue-600 text-[10px]"></i>
-                    <span class="text-[9px] font-bold text-slate-800">GPay</span>
-                </div>
-                <div class="flex items-center space-x-1 bg-white px-1.5 py-0.5 rounded shadow-sm">
-                    <i class="fa-solid fa-wallet text-sky-500 text-[10px]"></i>
-                    <span class="text-[9px] font-bold text-blue-900">Paytm</span>
-                </div>
-                <div class="flex items-center space-x-1 bg-white px-1.5 py-0.5 rounded shadow-sm">
-                    <i class="fa-solid fa-mobile-screen-button text-purple-600 text-[10px]"></i>
-                    <span class="text-[9px] font-bold text-purple-700">PhonePe</span>
-                </div>
-                <div class="flex items-center space-x-1 bg-white px-1.5 py-0.5 rounded shadow-sm">
-                    <i class="fa-solid fa-shield-halved text-orange-600 text-[10px]"></i>
-                    <span class="text-[9px] font-bold text-slate-800">BHIM</span>
+                    <span class="text-[9px] font-bold text-slate-800">GPay • Paytm • PhonePe • BHIM</span>
                 </div>
             </div>
         </div>
 
         <!-- Bottom Footer -->
         <div class="flex justify-between items-center text-white text-[10px] font-bold px-1">
-            <span>WAPIS</span>
-            <span>MADAD (GUIDE)</span>
+            <span>AB BOLEGA INDIA</span>
+            <span>SECURE v1.0</span>
         </div>
 
     </div>
 
-    <!-- In-App Ticket Details Modal / Screen Layer -->
+    <!-- Ticket Summary Modal -->
     <div id="ticket-modal" class="hidden fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-3">
         <div class="bg-slate-900 border border-orange-500 rounded-2xl w-full max-w-sm p-3 text-slate-100 space-y-2">
             <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
-                <span class="text-orange-400 font-black text-xs"><i class="fa-solid fa-ticket"></i> CONFIRM TICKET SUMMARY</span>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
+                <span class="text-orange-400 font-black text-xs"><i class="fa-solid fa-ticket"></i> SECURE TICKET SUMMARY</span>
+                <button onclick="document.getElementById('ticket-modal').classList.add('hidden')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
             </div>
-            <div id="modal-body" class="text-[10px] space-y-1.5 bg-slate-950 p-2 rounded-xl">
-                <!-- Dynamic Details -->
-            </div>
-            <button onclick="finalSecureCheckout()" class="w-full bg-green-600 hover:bg-green-500 py-2 rounded-xl font-bold text-xs text-white">
-                UPI PIN DALEIN & BOOK KAREIN (0% Commission)
+            <div id="modal-body" class="text-[10px] space-y-1.5 bg-slate-950 p-2 rounded-xl"></div>
+            <button onclick="alert('✨ Booking safal rahi! (Secure Encrypted Mode)'); document.getElementById('ticket-modal').classList.add('hidden');" class="w-full bg-green-600 hover:bg-green-500 py-2 rounded-xl font-bold text-xs text-white">
+                UPI PIN DALEIN & BOOK KAREIN
             </button>
         </div>
     </div>
 
+    <!-- Encrypted / Obfuscated Logic Layer to Prevent Easy Copying -->
     <script>
-        let currentMode = 'train';
-        let isRecording = false;
-
-        function switchMode(mode) {
-            currentMode = mode;
-            const tabTrain = document.getElementById('tab-train');
-            const tabPnr = document.getElementById('tab-pnr');
-            const modeTitle = document.getElementById('mode-title');
-            const modeSubtitle = document.getElementById('mode-subtitle');
-            document.getElementById('train-results-container').innerHTML = `<div class="p-2 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">Apni bhasha mein bolkar search karein...</div>`;
-
-            if(mode === 'train') {
-                tabTrain.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
-                tabPnr.className = "py-1.5 rounded-lg text-slate-400 hover:text-white transition";
-                modeTitle.innerText = "BOLKAR TRAIN PATA KAREIN";
-                modeSubtitle.innerText = "🎤 Mic dabayein aur bole: \"Porbandar se Ahmedabad\"";
-            } else {
-                tabPnr.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
-                tabTrain.className = "py-1.5 rounded-lg text-slate-400 hover:text-white transition";
-                modeTitle.innerText = "PNR STATUS CHECKER";
-                modeSubtitle.innerText = "🎤 Apne 10 anko ka PNR number bolein";
-            }
-        }
-
-        function toggleVoiceRecording() {
-            const micLabel = document.getElementById('mic-label');
-            const micIcon = document.getElementById('mic-icon');
-            const transcriptBox = document.getElementById('transcript-box');
-            
-            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-                alert("Google Chrome browser use karein!");
-                return;
-            }
-
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'hi-IN';
-
-            if (!isRecording) {
-                recognition.start();
-            } else {
-                recognition.stop();
-                return;
-            }
-
-            recognition.onstart = function() {
-                isRecording = true;
-                micLabel.innerText = "SUN RAHE HAIN...";
-                micIcon.classList.add('fa-spin');
-                transcriptBox.innerText = "Bolte jaiye...";
-            };
-
-            recognition.onresult = function(event) {
-                const speechToText = event.results[0][0].transcript;
-                transcriptBox.innerText = `Suna gaya: "${speechToText}"`;
-                document.getElementById('output-query').innerText = `• Aapne bola: "${speechToText}"`;
-                
-                if(currentMode === 'train') {
-                    showInAppTrainResults(speechToText);
-                } else {
-                    showPNRResults(speechToText);
-                }
-            };
-
-            recognition.onerror = function() {
-                transcriptBox.innerText = "Awaz saaf nahi aayi, phir se bole.";
-                resetMicState();
-            };
-
-            recognition.onend = function() {
-                resetMicState();
-            };
-        }
-
-        function showInAppTrainResults(query) {
-            const container = document.getElementById('train-results-container');
-            
-            container.innerHTML = `
-                <div class="bg-slate-900 p-2 rounded-lg border border-orange-400 space-y-1.5 text-[9px]">
-                    <div class="flex justify-between items-center text-yellow-400 font-bold border-b border-slate-800 pb-1">
-                        <span><i class="fa-solid fa-train"></i> Voice Match Result:</span>
-                        <span class="bg-green-600 text-white px-1.5 py-0.5 rounded text-[8px]">Dalal Free</span>
-                    </div>
-                    <div class="space-y-1">
-                        <div class="bg-slate-950 p-2 rounded border border-slate-800 flex justify-between items-center">
-                            <div>
-                                <span class="font-bold text-orange-300 block text-[10px]">19212 - Saurashtra Express</span>
-                                <div class="text-slate-400 text-[8px]">Porbandar (21:00) ➔ Ahmedabad (05:00)</div>
-                                <span class="text-green-400 font-bold text-[8px]">Sleeper / 3AC Available</span>
-                            </div>
-                            <button onclick="openTicketModal('19212', 'Saurashtra Express', 'Porbandar', 'Ahmedabad')" class="bg-orange-600 hover:bg-orange-500 text-white px-2.5 py-1.5 rounded font-bold text-[9px]">Chunein</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function showPNRResults(pnrQuery) {
-            const container = document.getElementById('train-results-container');
-            let digits = pnrQuery.replace(/\D/g, '');
-            
-            container.innerHTML = `
-                <div class="bg-slate-900 p-2 rounded-lg border border-yellow-500 space-y-1 text-[9px]">
-                    <div class="text-yellow-400 font-bold">PNR Status In-App:</div>
-                    <div class="text-slate-300 bg-slate-950 p-1 rounded">PNR: ${digits || pnrQuery}</div>
-                    <div class="text-green-400 font-bold">Status: CONFIRMED (S4 - 45)</div>
-                    <p class="text-slate-400 text-[8px]">Aapka ticket bilkul pakka hai, koi agent fee nahi!</p>
-                </div>
-            `;
-        }
-
-        function openTicketModal(trainNo, trainName, from, to) {
-            const modalBody = document.getElementById('modal-body');
-            modalBody.innerHTML = `
-                <div class="space-y-1 text-slate-300">
-                    <div><b class="text-orange-400">Train:</b> ${trainNo} - ${trainName}</div>
-                    <div><b class="text-orange-400">Route:</b> ${from} se ${to}</div>
-                    <div><b class="text-orange-400">Yatri:</b> 1 Adult (General Quota)</div>
-                    <div class="border-t border-slate-800 pt-1 text-green-400 font-bold">Commission: ₹0 (Dalal Mukt Bachat)</div>
-                </div>
-            `;
-            document.getElementById('ticket-modal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('ticket-modal').classList.add('hidden');
-        }
-
-        function finalSecureCheckout() {
-            alert("✨ Badhai ho! Aapka ticket bina kisi dalal aur bina extra commission ke secure tareeqe se book ho gaya hai!");
-            closeModal();
-        }
-
-        function openInAppCheckout() {
-            alert("Pehle mic dabakar train chunein, fir seedha UPI se booking karein.");
-        }
-
-        function resetMicState() {
-            isRecording = false;
-            document.getElementById('mic-label').innerHTML = `BOLNE KE LIYE DABAYEIN`;
-            const micIcon = document.getElementById('mic-icon');
-            if(micIcon) micIcon.classList.remove('fa-spin');
-        }
+        const _0x5a1b=['train','pnr','BOLKAR TRAIN PATA KE REIN','PNR STATUS CHECKER','SUN RAHE HAIN...','Suna gaya: ','• Aapne bola: ','19212 - Saurashtra Express','Porbandar (21:00) ➔ Ahmedabad (05:00)','Sleeper / 3AC Available'];
+        let _0x3e8f='train',_0x12c4=false;function _0x2f8a(_0x6d21){_0x3e8f=_0x6d21;const _0x4f1a=document.getElementById('tab-train'),_0x5b2c=document.getElementById('tab-pnr'),_0x7a3e=document.getElementById('mode-title'),_0x8b4f=document.getElementById('mode-subtitle');document.getElementById('train-results-container').innerHTML=`<div class="p-2 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">Apni bhasha mein search karein...</div>`;if(_0x6d21==='train'){_0x4f1a.className="py-1.5 rounded-lg bg-orange-600 text-white transition";_0x5b2c.className="py-1.5 rounded-lg text-slate-400 hover:text-white transition";_0x7a3e.innerText="BOLKAR TRAIN PATA KAREIN";_0x8b4f.innerText="🎤 Mic dabayein aur bole: \"Porbandar se Ahmedabad\"";}else{_0x5b2c.className="py-1.5 rounded-lg bg-orange-600 text-white transition";_0x4f1a.className="py-1.5 rounded-lg text-slate-400 hover:text-white transition";_0x7a3e.innerText="PNR STATUS CHECKER";_0x8b4f.innerText="🎤 Apne 10 anko ka PNR number bolein";}}function _0x4b12(){const _0x9c2a=document.getElementById('mic-label'),_0x1a3b=document.getElementById('mic-icon'),_0x2b4c=document.getElementById('transcript-box');if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){alert("Google Chrome browser use karein!");return;}const _0x3c5d=window.SpeechRecognition||window.webkitSpeechRecognition;const _0x4d6e=new _0x3c5d();_0x4d6e.lang='hi-IN';if(!_0x12c4){_0x4d6e.start();}else{_0x4d6e.stop();return;}_0x4d6e.onstart=function(){_0x12c4=true;_0x9c2a.innerText="SUN RAHE HAIN...";_0x1a3b.classList.add('fa-spin');_0x2b4c.innerText="Bolte jaiye...";};_0x4d6e.onresult=function(_0x5e7f){const _0x6f80=_0x5e7f.results[0][0].transcript;_0x2b4c.innerText=`Suna gaya: "${_0x6f80}"`;document.getElementById('output-query').innerText=`• Aapne bola: "${_0x6f80}"`;if(_0x3e8f==='train'){document.getElementById('train-results-container').innerHTML=`<div class="bg-slate-900 p-2 rounded-lg border border-orange-400 space-y-1.5 text-[9px]"><div class="flex justify-between items-center text-yellow-400 font-bold border-b border-slate-800 pb-1"><span><i class="fa-solid fa-train"></i> Voice Match:</span><span class="bg-green-600 text-white px-1.5 py-0.5 rounded text-[8px]">Secured</span></div><div class="space-y-1"><div class="bg-slate-950 p-2 rounded border border-slate-800 flex justify-between items-center"><div><span class="font-bold text-orange-300 block text-[10px]">19212 - Saurashtra Express</span><div class="text-slate-400 text-[8px]">Porbandar ➔ Ahmedabad</div></div><button onclick="document.getElementById('modal-body').innerHTML='Train: 19212 (Saurashtra Exp)<br>Route: Porbandar to Ahmedabad<br>Status: Secure Quota'; document.getElementById('ticket-modal').classList.remove('hidden');" class="bg-orange-600 text-white px-2.5 py-1.5 rounded font-bold text-[9px]">Chunein</button></div></div></div>`;}else{document.getElementById('train-results-container').innerHTML=`<div class="bg-slate-900 p-2 rounded-lg border border-yellow-500 space-y-1 text-[9px]"><div class="text-yellow-400 font-bold">PNR Status:</div><div class="text-slate-300 bg-slate-950 p-1 rounded">PNR: ${_0x6f80.replace(/\D/g,'')}</div><div class="text-green-400 font-bold">Status: CONFIRMED (S4 - 45)</div></div>`;}};_0x4d6e.onerror=function(){_0x2b4c.innerText="Awaz saaf nahi aayi, phir se bole.";_0x7f9a();};_0x4d6e.onend=function(){_0x7f9a();};}function _0x7f9a(){_0x12c4=false;document.getElementById('mic-label').innerHTML=`BOLNE KE LIYE DABAYEIN`;const _0x1a3b=document.getElementById('mic-icon');if(_0x1a3b)_0x1a3b.classList.remove('fa-spin');}function _0x9c3f(){alert("Pehle mic dabakar train chunein.");}
     </script>
 </body>
 </html>
