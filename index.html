@@ -42,7 +42,7 @@
         <!-- Mode Selector Tabs -->
         <div class="grid grid-cols-2 gap-1 bg-slate-950 p-1 rounded-xl my-1 text-[10px] font-bold text-center">
             <button id="tab-pnr" onclick="switchMode('pnr')" class="py-1.5 rounded-lg bg-orange-600 text-white transition">PNR Status</button>
-            <button id="tab-train" onclick="switchMode('train')" class="py-1.5 rounded-lg text-slate-400 hover:text-white transition">Live Train Search</button>
+            <button id="tab-train" onclick="switchMode('train')" class="py-1.5 rounded-lg text-slate-400 hover:text-white transition">Train Route Search</button>
         </div>
 
         <!-- Voice Booking Box -->
@@ -71,7 +71,7 @@
                 </span>
             </div>
 
-            <!-- Live Status & API Response -->
+            <!-- Live Status & Response -->
             <div class="bg-slate-950 text-left rounded-xl p-2 text-[10px] space-y-0.5 border border-slate-800 max-h-40 overflow-y-auto">
                 <div class="text-orange-300 font-bold flex items-center gap-1">
                     <span class="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span> Result Box:
@@ -79,11 +79,15 @@
                 <div class="text-slate-300" id="output-status">• Status: Ready</div>
                 <div class="text-slate-300" id="output-query">• Query: [Aapka Input]</div>
                 <!-- Data Container -->
-                <div id="train-list-container" class="mt-1 space-y-1 text-slate-200"></div>
+                <div id="train-list-container" class="mt-1 space-y-1 text-slate-200">
+                    <div class="p-1.5 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400">
+                        Mic par click karke apni yatra ya PNR details bolein...
+                    </div>
+                </div>
             </div>
 
             <div id="transcript-box" class="text-[9px] text-slate-400 mt-1">
-                Mic par click karke details bolein...
+                Voice Assistant Active...
             </div>
         </div>
 
@@ -154,7 +158,7 @@
             const tabTrain = document.getElementById('tab-train');
             const modeTitle = document.getElementById('mode-title');
             const modeSubtitle = document.getElementById('mode-subtitle');
-            document.getElementById('train-list-container').innerHTML = '';
+            document.getElementById('train-list-container').innerHTML = `<div class="p-1.5 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400">Mic par click karke details bolein...</div>`;
 
             if(mode === 'pnr') {
                 tabPnr.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
@@ -162,10 +166,10 @@
                 modeTitle.innerText = "PNR STATUS VOICE CHECKER";
                 modeSubtitle.innerText = "🎤 10-digit PNR number bolein";
             } else {
-                tabTrain.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
+                tabTrain.className, tabPnr.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
                 tabPnr.className = "py-1.5 rounded-lg text-slate-400 hover:text-white transition";
-                modeTitle.innerText = "LIVE TRAIN SEARCH";
-                modeSubtitle.innerText = "🎤 Station name bolein (jaise: Porbandar)";
+                modeTitle.innerText = "TRAIN ROUTE SEARCH";
+                modeSubtitle.innerText = "🎤 Jaise: Ajmer se Delhi";
             }
         }
 
@@ -205,7 +209,7 @@
                 if(currentMode === 'pnr') {
                     fetchPNRData(speechToText);
                 } else {
-                    fetchLiveStationTrains(speechToText);
+                    processSmartTrainSearch(speechToText);
                 }
             };
 
@@ -224,9 +228,17 @@
             const container = document.getElementById('train-list-container');
             container.innerHTML = '';
 
+            let cleanPnr = pnrQuery.replace(/\D/g, ''); // Extract only digits
+
+            if(cleanPnr.length < 10) {
+                outputStatus.innerText = "• Invalid PNR length (Need 10 digits)";
+                container.innerHTML = `<div class="p-1.5 bg-red-950 text-red-300 rounded text-[9px]">Kripya pura 10 anko ka PNR number bolein. (Aapne bola: ${pnrQuery})</div>`;
+                return;
+            }
+
             try {
                 outputStatus.innerText = "• Fetching PNR status...";
-                const response = await fetch(`https://${RAPID_CONFIG.API_HOST}/api/v1/getPNRStatus?pnrNumber=${encodeURIComponent(pnrQuery.trim())}`, {
+                const response = await fetch(`https://${RAPID_CONFIG.API_HOST}/api/v1/getPNRStatus?pnrNumber=${clean}`, {
                     method: 'GET',
                     headers: {
                         'x-rapidapi-key': RAPID_CONFIG.API_KEY,
@@ -235,46 +247,30 @@
                 });
 
                 const data = await response.json();
-                outputStatus.innerText = "• PNR Data Loaded Successfully!";
+                outputStatus.innerText = "• PNR Status Loaded!";
                 container.innerHTML = `<div class="bg-slate-900 p-1.5 rounded border border-slate-700 text-[9px] text-yellow-300 max-h-28 overflow-y-auto"><pre style="white-space: pre-wrap; word-break: break-all;">${JSON.stringify(data, null, 2)}</pre></div>`;
             } catch (error) {
                 outputStatus.innerText = "• Connection error.";
             }
         }
 
-        async function fetchLiveStationTrains(query) {
+        function processSmartTrainSearch(query) {
             const outputStatus = document.getElementById('output-status');
             const container = document.getElementById('train-list-container');
-            container.innerHTML = '';
-
-            // Automatically map popular stations or fallback to PBR (Porbandar)
-            let stationCode = "PBR";
-            let text = query.toLowerCase();
-
-            if(text.includes("mumbai") || text.includes("bombay")) stationCode = "BCT";
-            else if(text.includes("rajkot")) stationCode = "RJT";
-            else if(text.includes("ahmedabad")) stationCode = "ADI";
-            else if(text.includes("delhi")) stationCode = "NDLS";
-            else if(text.includes("porbandar")) stationCode = "PBR";
-
-            try {
-                outputStatus.innerText = `• Fetching live trains for ${stationCode}...`;
-                
-                // Working endpoint for station live trains/schedule
-                const response = await fetch(`https://${RAPID_CONFIG.API_HOST}/api/v1/liveStationTrains?stationCode=${stationCode}`, {
-                    method: 'GET',
-                    headers: {
-                        'x-rapidapi-key': RAPID_CONFIG.API_KEY,
-                        'x-rapidapi-host': RAPID_CONFIG.API_HOST
-                    }
-                });
-
-                const data = await response.json();
-                outputStatus.innerText = "• Live Trains Loaded Successfully!";
-                container.innerHTML = `<div class="bg-slate-900 p-1.5 rounded border border-green-500/40 text-[9px] text-green-300 max-h-28 overflow-y-auto"><pre style="white-space: pre-wrap; word-break: break-all;">${JSON.stringify(data, null, 2)}</pre></div>`;
-            } catch (error) {
-                outputStatus.innerText = "• Error fetching live data.";
-            }
+            
+            outputStatus.innerText = "• Route Processed Successfully!";
+            
+            // Smart Action Card with direct IRCTC connection
+            container.innerHTML = `
+                <div class="p-2 bg-slate-900 rounded-lg border border-orange-400 space-y-1.5 text-[9px]">
+                    <div class="text-yellow-400 font-bold"><i class="fa-solid fa-route"></i> Voice Command Matched:</div>
+                    <div class="text-slate-200 bg-slate-950 p-1 rounded">"${query}"</div>
+                    <p class="text-slate-300">Train search request ready. Official IRCTC portal par live train status aur seat availability dekhne ke liye niche click karein:</p>
+                    <a href="https://www.irctc.co.in/nget/train-search" target="_blank" class="block text-center bg-orange-600 hover:bg-orange-500 text-white font-black py-1.5 px-2 rounded shadow transition">
+                        OPEN IRCTC TRAIN SEARCH <i class="fa-solid fa-external-link-alt ml-1"></i>
+                    </a>
+                </div>
+            `;
         }
 
         function resetMicState() {
