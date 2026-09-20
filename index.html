@@ -165,7 +165,7 @@
                 tabTrain.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
                 tabPnr.className = "py-1.5 rounded-lg text-slate-400 hover:text-white transition";
                 modeTitle.innerText = "TRAIN SEARCH";
-                modeSubtitle.innerText = "🎤 Station code bolein (jaise: PBR to ADI)";
+                modeSubtitle.innerText = "🎤 Jaise: Porbandar se Mumbai";
             }
         }
 
@@ -247,19 +247,21 @@
             const container = document.getElementById('train-list-container');
             container.innerHTML = '';
 
-            // Default stations set to PBR (Porbandar) and ADI (Ahmedabad)
-            let fromStation = "PBR";
-            let toStation = "ADI";
-
             let text = query.toLowerCase();
-            if(text.includes("rajkot")) toStation = "RJT";
-            if(text.includes("delhi")) toStation = "NDLS";
-            if(text.includes("mumbai")) toStation = "BCT";
+            let fromStation = "PBR"; // Default Porbandar
+            let toStation = "ADI";   // Default Ahmedabad
+
+            // Smart keyword mapping from speech input
+            if(text.includes("mumbai") || text.includes("bombay")) toStation = "BCT";
+            else if(text.includes("rajkot")) toStation = "RJT";
+            else if(text.includes("delhi")) toStation = "NDLS";
+            else if(text.includes("ahmedabad")) toStation = "ADI";
+
+            if(text.includes("rajkot se")) fromStation = "RJT";
 
             try {
                 outputStatus.innerText = `• Searching Trains (${fromStation} to ${toStation})...`;
                 
-                // Updated correct endpoint path for train search
                 const response = await fetch(`https://${RAPID_CONFIG.API_HOST}/api/v1/searchTrain?fromStationCode=${fromStation}&toStationCode=${toStation}`, {
                     method: 'GET',
                     headers: {
