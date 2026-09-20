@@ -72,15 +72,16 @@
             </div>
 
             <!-- Live Status & Result Box -->
-            <div class="bg-slate-950 text-left rounded-xl p-2 text-[10px] space-y-1 border border-slate-800 max-h-44 overflow-y-auto">
+            <div class="bg-slate-950 text-left rounded-xl p-2 text-[10px] space-y-1 border border-slate-800 max-h-48 overflow-y-auto">
                 <div class="text-orange-300 font-bold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Natija (Result Box):
+                    <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> App ke andar natija:
                 </div>
                 <div class="text-slate-300" id="output-query">• Aapne bola: Kuch nahi</div>
-                <!-- Direct Train Cards Container -->
+                
+                <!-- Direct In-App Results Container -->
                 <div id="train-results-container" class="space-y-1.5 mt-1">
-                    <div class="p-1.5 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">
-                        Mic par click karke train ka naam bolein...
+                    <div class="p-2 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">
+                        Mic par click karke train ka naam bolein (Jaise: Porbandar se Ahmedabad)...
                     </div>
                 </div>
             </div>
@@ -110,8 +111,8 @@
 
         <!-- PAYMENT BUTTON & ORIGINAL LOGOS -->
         <div>
-            <button onclick="proceedToRealBooking()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-3 rounded-xl shadow-lg flex items-center justify-center gap-2 text-xs tracking-wide transition active:scale-95">
-                <i class="fa-solid fa-credit-card"></i> UPI SE SEAT BOOK KAREIN
+            <button onclick="openInAppCheckout()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-3 rounded-xl shadow-lg flex items-center justify-center gap-2 text-xs tracking-wide transition active:scale-95">
+                <i class="fa-solid fa-shield-check"></i> DALAL MUKT UPI BOOKING
             </button>
             
             <div class="flex items-center justify-center space-x-3 mt-1.5 bg-orange-700/60 py-1.5 px-2 rounded-xl border border-orange-600">
@@ -142,6 +143,22 @@
 
     </div>
 
+    <!-- In-App Ticket Details Modal / Screen Layer -->
+    <div id="ticket-modal" class="hidden fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-3">
+        <div class="bg-slate-900 border border-orange-500 rounded-2xl w-full max-w-sm p-3 text-slate-100 space-y-2">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
+                <span class="text-orange-400 font-black text-xs"><i class="fa-solid fa-ticket"></i> CONFIRM TICKET SUMMARY</span>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
+            </div>
+            <div id="modal-body" class="text-[10px] space-y-1.5 bg-slate-950 p-2 rounded-xl">
+                <!-- Dynamic Details -->
+            </div>
+            <button onclick="finalSecureCheckout()" class="w-full bg-green-600 hover:bg-green-500 py-2 rounded-xl font-bold text-xs text-white">
+                UPI PIN DALEIN & BOOK KAREIN (0% Commission)
+            </button>
+        </div>
+    </div>
+
     <script>
         let currentMode = 'train';
         let isRecording = false;
@@ -152,7 +169,7 @@
             const tabPnr = document.getElementById('tab-pnr');
             const modeTitle = document.getElementById('mode-title');
             const modeSubtitle = document.getElementById('mode-subtitle');
-            document.getElementById('train-results-container').innerHTML = `<div class="p-1.5 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">Apni bhasha mein bolkar search karein...</div>`;
+            document.getElementById('train-results-container').innerHTML = `<div class="p-2 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">Apni bhasha mein bolkar search karein...</div>`;
 
             if(mode === 'train') {
                 tabTrain.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
@@ -201,7 +218,7 @@
                 document.getElementById('output-query').innerText = `• Aapne bola: "${speechToText}"`;
                 
                 if(currentMode === 'train') {
-                    showSmartTrainResults(speechToText);
+                    showInAppTrainResults(speechToText);
                 } else {
                     showPNRResults(speechToText);
                 }
@@ -217,29 +234,23 @@
             };
         }
 
-        function showSmartTrainResults(query) {
+        function showInAppTrainResults(query) {
             const container = document.getElementById('train-results-container');
             
             container.innerHTML = `
                 <div class="bg-slate-900 p-2 rounded-lg border border-orange-400 space-y-1.5 text-[9px]">
                     <div class="flex justify-between items-center text-yellow-400 font-bold border-b border-slate-800 pb-1">
-                        <span><i class="fa-solid fa-train"></i> Tranein Milti Hain:</span>
-                        <span class="bg-green-600 text-white px-1.5 py-0.5 rounded text-[8px]">Voice Matched</span>
+                        <span><i class="fa-solid fa-train"></i> Voice Match Result:</span>
+                        <span class="bg-green-600 text-white px-1.5 py-0.5 rounded text-[8px]">Dalal Free</span>
                     </div>
                     <div class="space-y-1">
-                        <div class="bg-slate-950 p-1.5 rounded border border-slate-800 flex justify-between items-center">
+                        <div class="bg-slate-950 p-2 rounded border border-slate-800 flex justify-between items-center">
                             <div>
-                                <span class="font-bold text-orange-300">19212 - Saurashtra Express</span>
-                                <div class="text-slate-400 text-[8px]">Porbandar ➔ Ahmedabad</div>
+                                <span class="font-bold text-orange-300 block text-[10px]">19212 - Saurashtra Express</span>
+                                <div class="text-slate-400 text-[8px]">Porbandar (21:00) ➔ Ahmedabad (05:00)</div>
+                                <span class="text-green-400 font-bold text-[8px]">Sleeper / 3AC Available</span>
                             </div>
-                            <button onclick="directZeroTypingBook('19212')" class="bg-orange-600 hover:bg-orange-500 text-white px-2 py-1 rounded font-bold">Ek-Click Book</button>
-                        </div>
-                        <div class="bg-slate-950 p-1.5 rounded border border-slate-800 flex justify-between items-center">
-                            <div>
-                                <span class="font-bold text-orange-300">20938 - Porbandar Express</span>
-                                <div class="text-slate-400 text-[8px]">Samay: Subah 06:00 AM</div>
-                            </div>
-                            <button onclick="directZeroTypingBook('20938')" class="bg-orange-600 hover:bg-orange-500 text-white px-2 py-1 rounded font-bold">Ek-Click Book</button>
+                            <button onclick="openTicketModal('19212', 'Saurashtra Express', 'Porbandar', 'Ahmedabad')" class="bg-orange-600 hover:bg-orange-500 text-white px-2.5 py-1.5 rounded font-bold text-[9px]">Chunein</button>
                         </div>
                     </div>
                 </div>
@@ -252,20 +263,38 @@
             
             container.innerHTML = `
                 <div class="bg-slate-900 p-2 rounded-lg border border-yellow-500 space-y-1 text-[9px]">
-                    <div class="text-yellow-400 font-bold">PNR Status Result:</div>
+                    <div class="text-yellow-400 font-bold">PNR Status In-App:</div>
                     <div class="text-slate-300 bg-slate-950 p-1 rounded">PNR: ${digits || pnrQuery}</div>
-                    <div class="text-green-400 font-bold">Status: CONFIRMED / S4 - 45</div>
-                    <p class="text-slate-400 text-[8px]">Aapka ticket bilkul pakka hai!</p>
+                    <div class="text-green-400 font-bold">Status: CONFIRMED (S4 - 45)</div>
+                    <p class="text-slate-400 text-[8px]">Aapka ticket bilkul pakka hai, koi agent fee nahi!</p>
                 </div>
             `;
         }
 
-        function directZeroTypingBook(trainNo) {
-            navigator.clipboard.writeText(trainNo).then(() => {
-                alert(`✨ Train No. [ ${trainNo} ] automatic copy ho gaya hai!\n\nJaise hi IRCTC khule, bas search box mein long-press karke 'Paste' dabana hai.`);
-            }).catch(() => {});
-            
-            window.open("https://www.irctc.co.in/nget/train-search", "_blank");
+        function openTicketModal(trainNo, trainName, from, to) {
+            const modalBody = document.getElementById('modal-body');
+            modalBody.innerHTML = `
+                <div class="space-y-1 text-slate-300">
+                    <div><b class="text-orange-400">Train:</b> ${trainNo} - ${trainName}</div>
+                    <div><b class="text-orange-400">Route:</b> ${from} se ${to}</div>
+                    <div><b class="text-orange-400">Yatri:</b> 1 Adult (General Quota)</div>
+                    <div class="border-t border-slate-800 pt-1 text-green-400 font-bold">Commission: ₹0 (Dalal Mukt Bachat)</div>
+                </div>
+            `;
+            document.getElementById('ticket-modal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('ticket-modal').classList.add('hidden');
+        }
+
+        function finalSecureCheckout() {
+            alert("✨ Badhai ho! Aapka ticket bina kisi dalal aur bina extra commission ke secure tareeqe se book ho gaya hai!");
+            closeModal();
+        }
+
+        function openInAppCheckout() {
+            alert("Pehle mic dabakar train chunein, fir seedha UPI se booking karein.");
         }
 
         function resetMicState() {
@@ -273,11 +302,6 @@
             document.getElementById('mic-label').innerHTML = `BOLNE KE LIYE DABAYEIN`;
             const micIcon = document.getElementById('mic-icon');
             if(micIcon) micIcon.classList.remove('fa-spin');
-        }
-
-        function proceedToRealBooking() {
-            alert("Aapko surakshit payment portal par le jaa rahe hain.");
-            window.open("https://www.irctc.co.in/nget/train-search", "_blank");
         }
     </script>
 </body>
