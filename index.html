@@ -76,7 +76,7 @@
             </div>
 
             <div id="transcript-box" class="text-[9px] text-slate-400 mt-1">
-                Mic par click karein aur train number ya name bolein...
+                Mic par click karein aur PNR ya details bolein...
             </div>
         </div>
 
@@ -133,10 +133,10 @@
     </div>
 
     <script>
-        // CONFIG: RapidAPI Key aur Host yahan daalein
+        // CONFIG: Host is already set, just paste your RapidAPI Key inside quotes
         const RAPID_CONFIG = {
-            API_KEY: "c8ff7efe43mshb615431c4a240fep1cca5ajsnd07a531f7ac1",
-            API_HOST: "irctc1.p.rapidapi.com" // Example IRCTC API host on RapidAPI
+            API_KEY: "YAHAN_APNI_RAPIDAPI_KEY_DAALEIN",
+            API_HOST: "irctc-indian-railway-pnr-status.p.rapidapi.com"
         };
 
         let isRecording = false;
@@ -175,7 +175,7 @@
                 transcriptBox.innerText = `Aapne bola: "${speechToText}"`;
                 passengerDisplay.innerText = `• Details: ${speechToText}`;
                 
-                // RapidAPI ko train data ke liye call karein
+                // Call RapidAPI with speech query
                 fetchTrainDataFromRapidAPI(speechToText);
             };
 
@@ -198,10 +198,10 @@
             }
 
             try {
-                apiResponseBox.innerText = "• API Insight: Train data fetch ho raha hai...";
+                apiResponseBox.innerText = "• API Insight: Data fetch ho raha hai...";
                 
-                // Example RapidAPI fetch request for train search
-                const response = await fetch(`https://${RAPID_CONFIG.API_HOST}/api/v1/searchTrain?query=${encodeURIComponent(userQuery)}`, {
+                // Request using the configured host
+                const response = await fetch(`https://${RAPID_CONFIG.API_HOST}/getPNRStatus/${encodeURIComponent(userQuery)}`, {
                     method: 'GET',
                     headers: {
                         'x-rapidapi-key': RAPID_CONFIG.API_KEY,
@@ -210,7 +210,7 @@
                 });
 
                 const data = await response.json();
-                apiResponseBox.innerText = `• Data Received: Success! Redirecting...`;
+                apiResponseBox.innerText = `• Data Received: Success! Ready to book.`;
             } catch (error) {
                 apiResponseBox.innerText = "• API Insight: Connection successful, ready for booking.";
             }
@@ -219,7 +219,7 @@
         function resetMicState() {
             isRecording = false;
             document.getElementById('mic-label').innerHTML = `TAP TO SPEAK`;
-            document.getElementById('mic-icon'].classList.remove('fa-spin');
+            document.getElementById('mic-icon').classList.remove('fa-spin');
         }
 
         function proceedToRealBooking() {
