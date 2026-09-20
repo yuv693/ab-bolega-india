@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ab Bolega India</title>
+    <title>Ab Bolega India - Long Distance Travel Planner v11.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -28,29 +28,30 @@
                 </div>
                 <div>
                     <span class="font-black text-sm tracking-wider block leading-tight text-yellow-300 drop-shadow">AB BOLEGA INDIA</span>
-                    <span class="text-[8px] text-orange-200 block">Voice Train Search</span>
+                    <span class="text-[8px] text-orange-200 block">2 Months Advance Planner v11.0</span>
                 </div>
             </div>
             <div class="flex items-center space-x-2 text-xs text-orange-200">
-                <i class="fa-solid fa-lock text-yellow-300"></i>
+                <i class="fa-solid fa-calendar-days text-yellow-300"></i>
             </div>
         </div>
 
         <!-- Mode Selector Tabs -->
-        <div class="grid grid-cols-2 gap-1 bg-slate-950 p-1 rounded-xl my-1 text-[10px] font-bold text-center">
-            <button id="tab-train" onclick="switchTab('train')" class="py-1.5 rounded-lg bg-orange-600 text-white transition">Train & Seats</button>
-            <button id="tab-pnr" onclick="switchTab('pnr')" class="py-1.5 rounded-lg text-slate-400 hover:text-white transition">PNR Status</button>
+        <div class="grid grid-cols-3 gap-1 bg-slate-950 p-1 rounded-xl my-1 text-[9px] font-bold text-center">
+            <button id="tab-train" onclick="switchTab('train')" class="py-1.5 rounded-lg bg-orange-600 text-white transition">Advance Plan</button>
+            <button id="tab-history" onclick="switchTab('history')" class="py-1.5 rounded-lg text-slate-400 hover:text-white transition">Saved Plans</button>
+            <button id="tab-reminder" onclick="switchTab('reminder')" class="py-1.5 rounded-lg text-slate-400 hover:text-white transition">Reminders</button>
         </div>
 
-        <!-- Voice Search Box -->
+        <!-- Main Content Box -->
         <div class="bg-slate-900 text-slate-100 rounded-2xl p-3 shadow-lg border border-orange-400/40 text-center my-1">
             <h1 id="mode-title" class="text-[11px] font-black text-orange-400 tracking-wider leading-snug drop-shadow mb-0.5">
-                BOLKAR TRAIN PATA KAREIN
+                2 MAHINE BAAD KA LAMBA SAFAR PLAN KAREIN
             </h1>
-            <p id="mode-subtitle" class="text-[9px] text-yellow-400 font-bold mb-1">🎤 Mic dabayein aur route bolein</p>
+            <p id="mode-subtitle" class="text-[9px] text-yellow-400 font-bold mb-1">🎤 Bolein (jaise: Porbandar se Kashmir ya Mumbai)</p>
             
             <!-- Center Mic -->
-            <div class="flex flex-col items-center justify-center my-2 relative">
+            <div id="mic-section" class="flex flex-col items-center justify-center my-2 relative">
                 <div class="absolute inset-0 flex items-center justify-center space-x-1 audio-wave-bg pointer-events-none opacity-80">
                     <span class="w-1 h-4 bg-orange-500/40 rounded-full"></span>
                     <span class="w-1.5 h-8 bg-orange-400 rounded-full"></span>
@@ -71,14 +72,14 @@
             <!-- In-App Result Box -->
             <div class="bg-slate-950 text-left rounded-xl p-2 text-[10px] space-y-1 border border-slate-800 max-h-52 overflow-y-auto">
                 <div class="text-orange-300 font-bold flex items-center justify-between">
-                    <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Trains List:</span>
-                    <span class="text-[8px] text-yellow-400 font-normal">Dalal Mukt</span>
+                    <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> <span id="box-heading">2-4 Planning Options:</span></span>
+                    <span class="text-[8px] text-yellow-400 font-normal">Advance Booking Open</span>
                 </div>
                 <div class="text-slate-300 text-[9px]" id="output-query">• Suna gaya: Kuch nahi</div>
                 
-                <div id="train-results-container" class="space-y-1.5 mt-1">
+                <div id="dynamic-container" class="space-y-1.5 mt-1">
                     <div class="p-2 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">
-                        Mic dabakar train ka naam bolein...
+                        Mic dabakar route bolein (jaise: Kashmir ya Mumbai)...
                     </div>
                 </div>
             </div>
@@ -109,35 +110,146 @@
         <!-- Bottom Footer -->
         <div class="flex justify-between items-center text-white text-[10px] font-bold px-1">
             <span>AB BOLEGA INDIA</span>
-            <span>SECURE v4.1</span>
+            <span>SECURE v11.0</span>
         </div>
 
     </div>
 
-    <!-- Working Clean Logic -->
+    <!-- 🛠️ LAMBE SAFAR AUR 2 MAHINE BAAD KE OPTIONS YAHAN UPDATE KAREIN -->
     <script>
+        // Yahan aap alag-alag routes ke 2-4 options set kar sakte hain bhai!
+        const travelPlansDatabase = {
+            "kashmir": [
+                {
+                    option: "Option 1 (Train + Connect)",
+                    trains: "1. Saurashtra Exp (Pbr ➔ Ahd) + 2. Jammu Tawi Exp",
+                    route: "Porbandar ➔ Ahmedabad ➔ Delhi ➔ Jammu ➔ Srinagar (Kashmir)",
+                    time: "2 Din ka Safar | Subah 08:30 AM",
+                    status: "🟢 3AC Advance Seats Available (2 Months Open)"
+                },
+                {
+                    option: "Option 2 (Via Rajkot Express)",
+                    trains: "1. Rajkot Exp + 3. Uttar Sampark Kranti",
+                    route: "Porbandar ➔ Rajkot ➔ New Delhi ➔ Shri Mata Vaishno Devi Katra",
+                    time: "2 Din ka Safar | Dopahar 02:15 PM",
+                    status: "🟡 Sleeper: WL 12 (Advance Booking)"
+                },
+                {
+                    option: "Option 3 (Fast Flight + Train Combo)",
+                    trains: "Rajkot Flight/Train + Srinagar Flight",
+                    route: "Porbandar ➔ Rajkot/Ahmedabad ➔ Direct Flight to Srinagar",
+                    time: "Same Day Arrival | Subah 06:00 AM",
+                    status: "🟢 Flights Available (Best for Kashmir)"
+                },
+                {
+                    option: "Option 4 (Special Tourist Route)",
+                    trains: "Somnath Special + Rajdhani Route",
+                    route: "Porbandar ➔ Veraval ➔ Ahmedabad ➔ Ambala ➔ Jammu ➔ Kashmir",
+                    time: "3 Din ka Safar | Sham 06:00 PM",
+                    status: "🟢 2nd AC Available"
+                }
+            ],
+            "mumbai": [
+                {
+                    option: "Option 1 (Direct Saurashtra Mail style)",
+                    trains: "1. Saurashtra Express ➔ Ahmedabad ➔ Mumbai Central",
+                    route: "Porbandar ➔ Rajkot ➔ Vadodara ➔ Surat ➔ Mumbai",
+                    time: "Agli Subah Pahuchav | Subah 08:30 AM",
+                    status: "🟢 3AC & Sleeper Available"
+                },
+                {
+                    option: "Option 2 (Via Rajkot Superfast)",
+                    trains: "2. Porbandar - Rajkot Intercity + Saurashtra Janta",
+                    route: "Porbandar ➔ Hirasar ➔ Rajkot ➔ Anand ➔ Mumbai Dadar",
+                    time: "Dopahar 02:15 PM",
+                    status: "🟢 Sleeper Open (2 Months Advance)"
+                },
+                {
+                    option: "Option 3 (Luxury Bus / Volvo Option)",
+                    trains: "Private/ GSRTC Sleeper Bus Connect",
+                    route: "Porbandar ➔ Rajkot Bypass ➔ Mumbai Highway Express",
+                    time: "Rath ka Safar | Sham 05:00 PM",
+                    status: "🟢 Seats Available"
+                },
+                {
+                    option: "Option 4 (Air Travel)",
+                    trains: "Porbandar/Rajkot to Mumbai Direct Flight",
+                    route: "Porbandar Airport ➔ Mumbai Chhatrapati Shivaji Maharaj Airport",
+                    time: "Sirf 1.5 Ghante | Subah 10:00 AM",
+                    status: "🟢 Flight Seats Open"
+                }
+            ],
+            "default": [
+                {
+                    option: "Option 1 (Standard Express)",
+                    trains: "19212 - Saurashtra Express",
+                    route: "Porbandar ➔ Rajkot ➔ Surendranagar ➔ Ahmedabad",
+                    time: "Subah 08:30 AM",
+                    status: "🟢 Advance Booking Open"
+                },
+                {
+                    option: "Option 2 (Connecting Route)",
+                    trains: "19571 - Rajkot Express + Mail",
+                    route: "Porbandar ➔ Hirasar ➔ Rajkot Junction",
+                    time: "Dopahar 02:15 PM",
+                    status: "🟡 Waiting 5 (2 Months Advance)"
+                },
+                {
+                    option: "Option 3 (Special Train)",
+                    trains: "09206 - Somnath Special",
+                    route: "Porbandar ➔ Veraval ➔ Botad",
+                    time: "Sham 06:00 PM",
+                    status: "🟢 Sleeper Available"
+                },
+                {
+                    option: "Option 4 (Long Route Alternative)",
+                    trains: "Express Multi-Hop Planning",
+                    route: "Porbandar ➔ Mega Junction ➔ Destination",
+                    time: "Custom Schedule",
+                    status: "🟢 Open for Booking"
+                }
+            ]
+        };
+
         let currentMode = 'train';
         let isListening = false;
+        let searchHistory = JSON.parse(localStorage.getItem('ab_bolega_v11_history')) || [];
 
         function switchTab(mode) {
             currentMode = mode;
             const tabTrain = document.getElementById('tab-train');
-            const tabPnr = document.getElementById('tab-pnr');
+            const tabHistory = document.getElementById('tab-history');
+            const tabReminder = document.getElementById('tab-reminder');
             const modeTitle = document.getElementById('mode-title');
             const modeSubtitle = document.getElementById('mode-subtitle');
+            const micSection = document.getElementById('mic-section');
+            const boxHeading = document.getElementById('box-heading');
             
-            document.getElementById('train-results-container').innerHTML = `<div class="p-2 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">Mic dabakar route bolein...</div>`;
-            
+            tabTrain.className = "py-1.5 rounded-lg text-slate-400 hover:text-white transition";
+            tabHistory.className = "py-1.5 rounded-lg text-slate-400 hover:text-white transition";
+            tabReminder.className = "py-1.5 rounded-lg text-slate-400 hover:text-white transition";
+
             if (mode === 'train') {
                 tabTrain.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
-                tabPnr.className = "py-1.5 rounded-lg text-slate-400 hover:text-white transition";
-                modeTitle.innerText = "BOLKAR TRAIN PATA KAREIN";
-                modeSubtitle.innerText = "🎤 Mic dabayein aur route bolein";
+                modeTitle.innerText = "2 MAHINE BAAD KA LAMBA SAFAR PLAN KAREIN";
+                modeSubtitle.innerText = "🎤 Bolein (jaise: Kashmir ya Mumbai)";
+                micSection.style.display = "flex";
+                boxHeading.innerText = "2-4 Planning Options:";
+                document.getElementById('dynamic-container').innerHTML = `<div class="p-2 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">Mic dabakar destination bolein...</div>`;
+            } else if (mode === 'history') {
+                tabHistory.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
+                modeTitle.innerText = "AAPKE SAVED PLANS";
+                modeSubtitle.innerText = "📁 2 mahine baad ke advance plans";
+                micSection.style.display = "none";
+                boxHeading.innerText = "Saved Advance Plans:";
+                renderHistory();
             } else {
-                tabPnr.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
-                tabTrain.className = "py-1.5 rounded-lg text-slate-400 hover:text-white transition";
-                modeTitle.innerText = "PNR STATUS CHECKER";
-                modeSubtitle.innerText = "🎤 Apna PNR number bolein";
+                tabReminder.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
+                modeTitle.innerText = "YATRA REMINDER MESSAGE";
+                modeSubtitle.innerText = "⏰ Samay par milne wala sandesh";
+                micSection.style.display = "none";
+                boxHeading.innerText = "Active Reminders:";
+                renderReminders();
             }
         }
 
@@ -170,39 +282,41 @@
             };
 
             recognition.onresult = function(event) {
-                const spokenText = event.results[0][0].transcript;
+                const spokenText = event.results[0][0].transcript.toLowerCase();
                 transcriptBox.innerText = `Suna gaya: "${spokenText}"`;
-                document.getElementById('output-query').innerText = `• Suna gaya: "${spokenText}"`;
+                document.getElementById('output-query').innerText = `• Plan: "${spokenText}" (4 Advance Options)`;
 
-                if (currentMode === 'train') {
-                    document.getElementById('train-results-container').innerHTML = `
-                        <div class="space-y-1.5">
-                            <div class="bg-slate-900 p-2 rounded-lg border border-orange-400 flex justify-between items-center">
-                                <div>
-                                    <span class="font-bold text-orange-300 block text-[10px]">19212 - Saurashtra Express</span>
-                                    <div class="text-slate-400 text-[8px]">Porbandar ➔ Ahmedabad</div>
-                                    <span class="text-emerald-400 font-bold text-[8px]">🟢 Sleeper: Available</span>
-                                </div>
-                                <span class="bg-emerald-600 text-white px-2 py-1 rounded font-bold text-[8px]">Safe</span>
-                            </div>
-                            <div class="bg-slate-900 p-2 rounded-lg border border-slate-800 flex justify-between items-center">
-                                <div>
-                                    <span class="font-bold text-orange-300 block text-[10px]">19571 - Rajkot Express</span>
-                                    <div class="text-slate-400 text-[8px]">Porbandar ➔ Rajkot</div>
-                                    <span class="text-yellow-400 font-bold text-[8px]">🟡 3AC: Waiting</span>
-                                </div>
-                                <span class="bg-slate-800 text-slate-300 px-2 py-1 rounded font-bold text-[8px]">Check</span>
-                            </div>
-                        </div>`;
-                } else {
-                    const cleanPnr = spokenText.replace(/\D/g, '') || '1234567890';
-                    document.getElementById('train-results-container').innerHTML = `
-                        <div class="bg-slate-900 p-2 rounded-lg border border-yellow-500 space-y-1 text-[9px]">
-                            <div class="text-yellow-400 font-bold">PNR Status:</div>
-                            <div class="text-slate-300 bg-slate-950 p-1 rounded">Number: ${cleanPnr}</div>
-                            <div class="text-green-400 font-bold">Status: CHART PREPARED / CONFIRMED</div>
-                        </div>`;
+                // Match database key
+                let selectedPlans = travelPlansDatabase["default"];
+                if (spokenText.includes('kashmir') || spokenText.includes('srinagar')) {
+                    selectedPlans = travelPlansDatabase["kashmir"];
+                } else if (spokenText.includes('mumbai') || spokenText.includes('bombay')) {
+                    selectedPlans = travelPlansDatabase["mumbai"];
                 }
+
+                // Save to History
+                searchHistory.unshift({ query: spokenText, date: "2 Months Advance Plan" });
+                localStorage.setItem('ab_bolega_v11_history', JSON.stringify(searchHistory));
+
+                // Render 4 Options
+                let html = '<div class="space-y-1.5">';
+                selectedPlans.forEach((plan, index) => {
+                    let borderColor = index === 0 ? "border-emerald-500" : (index === 1 ? "border-yellow-500" : (index === 2 ? "border-blue-500" : "border-purple-500"));
+                    html += `
+                        <div class="bg-slate-900 p-2 rounded-lg border ${borderColor} space-y-0.5">
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-orange-300 text-[10px]">${plan.option}</span>
+                                <span class="bg-orange-600 text-white px-1.5 py-0.5 rounded text-[8px] font-bold">2 Months Open</span>
+                            </div>
+                            <div class="text-yellow-300 text-[8px]">🚆 Trains: ${plan.trains}</div>
+                            <div class="text-slate-300 text-[8px]">📍 Rasta: ${plan.route}</div>
+                            <div class="text-slate-400 text-[8px]">🕒 Samay: ${plan.time}</div>
+                            <div class="text-emerald-400 text-[8px] font-bold">${plan.status}</div>
+                        </div>`;
+                });
+                html += '</div>';
+
+                document.getElementById('dynamic-container').innerHTML = html;
             };
 
             recognition.onerror = function() {
@@ -214,6 +328,31 @@
                 resetMicState();
             };
         }
+
+        function renderHistory() {
+            let html = '<div class="space-y-1.5">';
+            if(searchHistory.length === 0) {
+                html += '<div class="text-slate-400 text-center text-[9px]">Koi advance plan nahi hai.</div>';
+            } else {
+                searchHistory.forEach((item) => {
+                    html += `
+                        <div class="bg-slate-900 p-2 rounded-lg border border-slate-800 text-[9px] space-y-0.5">
+                            <div class="font-bold text-orange-300">Destination: ${item.query}</div>
+                            <div class="text-yellow-400 text-[8px]">Status: ${item.date}</div>
+                        </div>`;
+                });
+            }
+            html += '</div>';
+            document.getElementById('dynamic-container').innerHTML = html;
+        }
+
+        function renderReminders() {
+            document.getElementById('dynamic-container').innerHTML = `
+                <div class="bg-slate-900 p-2 rounded-lg border border-yellow-500 text-[9px] space-y-1">
+                    <div class="text-yellow-400 font-bold flex items-center gap-1"><i class="fa-solid fa-bell"></i> 2 Months Advance Alert Active</div>
+                    <div class="text-slate-300">Aapke 2 mahine baad ke lambe safar (Kashmir/Mumbai) ke liye reminder active hai.</div>
+                </div>`;
+            }
 
         function resetMicState() {
             isListening = false;
