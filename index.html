@@ -38,8 +38,8 @@
 
         <!-- Mode Selector Tabs -->
         <div class="grid grid-cols-2 gap-1 bg-slate-950 p-1 rounded-xl my-1 text-[10px] font-bold text-center">
-            <button id="tab-train" onclick="_0x2f8a('train')" class="py-1.5 rounded-lg bg-orange-600 text-white transition">Train & Seats</button>
-            <button id="tab-pnr" onclick="_0x2f8a('pnr')" class="py-1.5 rounded-lg text-slate-400 hover:text-white transition">PNR Status</button>
+            <button id="tab-train" onclick="switchTab('train')" class="py-1.5 rounded-lg bg-orange-600 text-white transition">Train & Seats</button>
+            <button id="tab-pnr" onclick="switchTab('pnr')" class="py-1.5 rounded-lg text-slate-400 hover:text-white transition">PNR Status</button>
         </div>
 
         <!-- Voice Search Box -->
@@ -59,7 +59,7 @@
                     <span class="w-1 h-4 bg-orange-500/40 rounded-full"></span>
                 </div>
 
-                <button onclick="_0x4b12()" class="relative z-10 w-16 h-16 bg-slate-950 border-2 border-orange-400 rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition">
+                <button onclick="startVoiceSearch()" class="relative z-10 w-16 h-16 bg-slate-950 border-2 border-orange-400 rounded-full flex items-center justify-center shadow-lg hover:scale-105 active:scale-95 transition">
                     <i class="fa-solid fa-microphone text-white text-xl" id="mic-icon"></i>
                 </button>
                 
@@ -109,49 +109,73 @@
         <!-- Bottom Footer -->
         <div class="flex justify-between items-center text-white text-[10px] font-bold px-1">
             <span>AB BOLEGA INDIA</span>
-            <span>SECURE v4.0</span>
+            <span>SECURE v4.1</span>
         </div>
 
     </div>
 
-    <!-- Clean In-App Logic -->
+    <!-- Working Clean Logic -->
     <script>
-        let _0x3e8f='train',_0x12c4=false;
-        function _0x2f8a(_0x6d21){
-            _0x3e8f=_0x6d21;
-            const _0x4f1a=document.getElementById('tab-train'),_0x5b2c=document.getElementById('tab-pnr'),_0x7a3e=document.getElementById('mode-title'),_0x8b4f=document.getElementById('mode-subtitle');
-            document.getElementById('train-results-container').innerHTML=`<div class="p-2 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">Mic dabakar route bolein...</div>`;
-            if(_0x6d21==='train'){
-                _0x4f1a.className="py-1.5 rounded-lg bg-orange-600 text-white transition";
-                _0x5b2c.className="py-1.5 rounded-lg text-slate-400 hover:text-white transition";
-                _0x7a3e.innerText="BOLKAR TRAIN PATA KAREIN";
-                _0x8b4f.innerText="🎤 Mic dabayein aur route bolein";
-            }else{
-                _0x5b2c.className="py-1.5 rounded-lg bg-orange-600 text-white transition";
-                _0x4f1a.className="py-1.5 rounded-lg text-slate-400 hover:text-white transition";
-                _0x7a3e.innerText="PNR STATUS CHECKER";
-                _0x8b4f.innerText="🎤 Apna PNR number bolein";
+        let currentMode = 'train';
+        let isListening = false;
+
+        function switchTab(mode) {
+            currentMode = mode;
+            const tabTrain = document.getElementById('tab-train');
+            const tabPnr = document.getElementById('tab-pnr');
+            const modeTitle = document.getElementById('mode-title');
+            const modeSubtitle = document.getElementById('mode-subtitle');
+            
+            document.getElementById('train-results-container').innerHTML = `<div class="p-2 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">Mic dabakar route bolein...</div>`;
+            
+            if (mode === 'train') {
+                tabTrain.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
+                tabPnr.className = "py-1.5 rounded-lg text-slate-400 hover:text-white transition";
+                modeTitle.innerText = "BOLKAR TRAIN PATA KAREIN";
+                modeSubtitle.innerText = "🎤 Mic dabayein aur route bolein";
+            } else {
+                tabPnr.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
+                tabTrain.className = "py-1.5 rounded-lg text-slate-400 hover:text-white transition";
+                modeTitle.innerText = "PNR STATUS CHECKER";
+                modeSubtitle.innerText = "🎤 Apna PNR number bolein";
             }
         }
-        function _0x4b12(){
-            const _0x9c2a=document.getElementById('mic-label'),_0x1a3b=document.getElementById('mic-icon'),_0x2b4c=document.getElementById('transcript-box');
-            if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){alert("Google Chrome browser use karein!");return;}
-            const _0x3c5d=window.SpeechRecognition||window.webkitSpeechRecognition;
-            const _0x4d6e=new _0x3c5d();
-            _0x4d6e.lang='hi-IN';
-            if(!_0x12c4){_0x4d6e.start();}else{_0x4d6e.stop();return;}
-            _0x4d6e.onstart=function(){
-                _0x12c4=true;
-                _0x9c2a.innerText="SUN RAHE HAIN...";
-                _0x1a3b.classList.add('fa-spin');
-                _0x2b4c.innerText="Bolte jaiye...";
+
+        function startVoiceSearch() {
+            const micLabel = document.getElementById('mic-label');
+            const micIcon = document.getElementById('mic-icon');
+            const transcriptBox = document.getElementById('transcript-box');
+
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert("Google Chrome browser use karein!");
+                return;
+            }
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'hi-IN';
+
+            if (!isListening) {
+                recognition.start();
+            } else {
+                recognition.stop();
+                return;
+            }
+
+            recognition.onstart = function() {
+                isListening = true;
+                micLabel.innerText = "SUN RAHE HAIN...";
+                micIcon.classList.add('fa-spin');
+                transcriptBox.innerText = "Bolte jaiye...";
             };
-            _0x4d6e.onresult=function(_0x5e7f){
-                const _0x6f80=_0x5e7f.results[0][0].transcript;
-                _0x2b4c.innerText=`Suna gaya: "${_0x6f80}"`;
-                document.getElementById('output-query').innerText=`• Suna gaya: "${_0x6f80}"`;
-                if(_0x3e8f==='train'){
-                    document.getElementById('train-results-container').innerHTML=`
+
+            recognition.onresult = function(event) {
+                const spokenText = event.results[0][0].transcript;
+                transcriptBox.innerText = `Suna gaya: "${spokenText}"`;
+                document.getElementById('output-query').innerText = `• Suna gaya: "${spokenText}"`;
+
+                if (currentMode === 'train') {
+                    document.getElementById('train-results-container').innerHTML = `
                         <div class="space-y-1.5">
                             <div class="bg-slate-900 p-2 rounded-lg border border-orange-400 flex justify-between items-center">
                                 <div>
@@ -170,23 +194,32 @@
                                 <span class="bg-slate-800 text-slate-300 px-2 py-1 rounded font-bold text-[8px]">Check</span>
                             </div>
                         </div>`;
-                }else{
-                    document.getElementById('train-rules-container']||(document.getElementById('train-results-container').innerHTML=`
+                } else {
+                    const cleanPnr = spokenText.replace(/\D/g, '') || '1234567890';
+                    document.getElementById('train-results-container').innerHTML = `
                         <div class="bg-slate-900 p-2 rounded-lg border border-yellow-500 space-y-1 text-[9px]">
                             <div class="text-yellow-400 font-bold">PNR Status:</div>
-                            <div class="text-slate-300 bg-slate-950 p-1 rounded">Number: ${_0x6f80.replace(/\D/g,'')}</div>
+                            <div class="text-slate-300 bg-slate-950 p-1 rounded">Number: ${cleanPnr}</div>
                             <div class="text-green-400 font-bold">Status: CHART PREPARED / CONFIRMED</div>
-                        </div>`);
+                        </div>`;
                 }
             };
-            _0x4d6e.onerror=function(){_0x2b4c.innerText="Awaz saaf nahi aayi, phir se bole.";_0x7f9a();};
-            _0x4d6e.onend=function(){_0x7f9a();};
+
+            recognition.onerror = function() {
+                transcriptBox.innerText = "Awaz saaf nahi aayi, phir se bole.";
+                resetMicState();
+            };
+
+            recognition.onend = function() {
+                resetMicState();
+            };
         }
-        function _0x7f9a(){
-            _0x12c4=false;
-            document.getElementById('mic-label').innerHTML=`BOLNE KE LIYE DABAYEIN`;
-            const _0x1a3b=document.getElementById('mic-icon');
-            if(_0x1a3b)_0x1a3b.classList.remove('fa-spin');
+
+        function resetMicState() {
+            isListening = false;
+            document.getElementById('mic-label').innerText = "BOLNE KE LIYE DABAYEIN";
+            const micIcon = document.getElementById('mic-icon');
+            if (micIcon) micIcon.classList.remove('fa-spin');
         }
     </script>
 </body>
