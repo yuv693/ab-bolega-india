@@ -232,14 +232,14 @@
                                 <span class="font-bold text-orange-300">19212 - Saurashtra Express</span>
                                 <div class="text-slate-400 text-[8px]">Porbandar ➔ Ahmedabad</div>
                             </div>
-                            <button onclick="directZeroTypingBook('19212', 'PBR', 'ADI')" class="bg-orange-600 hover:bg-orange-500 text-white px-2 py-1 rounded font-bold">Ek-Click Book</button>
+                            <button onclick="directZeroTypingBook('19212')" class="bg-orange-600 hover:bg-orange-500 text-white px-2 py-1 rounded font-bold">Ek-Click Book</button>
                         </div>
                         <div class="bg-slate-950 p-1.5 rounded border border-slate-800 flex justify-between items-center">
                             <div>
                                 <span class="font-bold text-orange-300">20938 - Porbandar Express</span>
                                 <div class="text-slate-400 text-[8px]">Samay: Subah 06:00 AM</div>
                             </div>
-                            <button onclick="directZeroTypingBook('20938', 'PBR', 'ADI')" class="bg-orange-600 hover:bg-orange-500 text-white px-2 py-1 rounded font-bold">Ek-Click Book</button>
+                            <button onclick="directZeroTypingBook('20938')" class="bg-orange-600 hover:bg-orange-500 text-white px-2 py-1 rounded font-bold">Ek-Click Book</button>
                         </div>
                     </div>
                 </div>
@@ -260,10 +260,9 @@
             `;
         }
 
-        // ZERO-TYPING AUTOMATION: Automatically copies code and guides user instantly
-        function directZeroTypingBook(trainNo, fromStation, toStation) {
+        function directZeroTypingBook(trainNo) {
             navigator.clipboard.writeText(trainNo).then(() => {
-                alert(`✨ Train No. [ ${trainNo} ] automatic copy ho gaya hai!\n\nJaise hi IRCTC khule, bas search box mein long-press karke 'Paste' dabana hai. Koi English ya lamba type nahi karna padega!`);
+                alert(`✨ Train No. [ ${trainNo} ] automatic copy ho gaya hai!\n\nJaise hi IRCTC khule, bas search box mein long-press karke 'Paste' dabana hai.`);
             }).catch(() => {});
             
             window.open("https://www.irctc.co.in/nget/train-search", "_blank");
@@ -272,7 +271,8 @@
         function resetMicState() {
             isRecording = false;
             document.getElementById('mic-label').innerHTML = `BOLNE KE LIYE DABAYEIN`;
-            document.getElementById('mic-icon'].classList.remove('fa-spin');
+            const micIcon = document.getElementById('mic-icon');
+            if(micIcon) micIcon.classList.remove('fa-spin');
         }
 
         function proceedToRealBooking() {
