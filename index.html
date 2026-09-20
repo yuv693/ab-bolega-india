@@ -68,15 +68,15 @@
             <!-- Live Status & API Response -->
             <div class="bg-slate-950 text-left rounded-xl p-2 text-[10px] space-y-0.5 border border-slate-800">
                 <div class="text-orange-300 font-bold flex items-center gap-1">
-                    <span class="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span> RapidAPI Train Status:
+                    <span class="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span> RapidAPI Result:
                 </div>
-                <div class="text-slate-300" id="train-display">• Train: Saurashtra Express (19016)</div>
+                <div class="text-slate-300" id="train-display">• Train/PNR Info: Ready</div>
                 <div class="text-slate-300" id="passenger-display">• Details: [Aapka Query Yahan Ayega]</div>
-                <div class="text-slate-300 text-green-400" id="api-response">• API Insight: Ready for voice input</div>
+                <div class="text-slate-300 text-green-400" id="api-response">• API Insight: Mic dabakar PNR ya number bolein</div>
             </div>
 
             <div id="transcript-box" class="text-[9px] text-slate-400 mt-1">
-                Mic par click karein aur PNR ya details bolein...
+                Mic par click karein aur train/PNR details bolein...
             </div>
         </div>
 
@@ -135,7 +135,7 @@
     <script>
         // CONFIG: Host is already set, just paste your RapidAPI Key inside quotes
         const RAPID_CONFIG = {
-            API_KEY: "c8ff7efe43mshb615431c4a240fep1cca5ajsnd07a531f7ac1",
+            API_KEY: "YAHAN_APNI_RAPIDAPI_KEY_DAALEIN",
             API_HOST: "irctc-indian-railway-pnr-status.p.rapidapi.com"
         };
 
@@ -173,9 +173,9 @@
             recognition.onresult = function(event) {
                 const speechToText = event.results[0][0].transcript;
                 transcriptBox.innerText = `Aapne bola: "${speechToText}"`;
-                passengerDisplay.innerText = `• Details: ${speechToText}`;
+                passengerDisplay.innerText = `• Query: ${speechToText}`;
                 
-                // Call RapidAPI with speech query
+                // Call RapidAPI
                 fetchTrainDataFromRapidAPI(speechToText);
             };
 
@@ -191,8 +191,9 @@
 
         async function fetchTrainDataFromRapidAPI(userQuery) {
             const apiResponseBox = document.getElementById('api-response');
+            const trainDisplay = document.getElementById('train-display');
             
-            if(RAPID_CONFIG.API_KEY === "YAHAN_APNI_RAPIDAPI_KEY_DAALEIN" || !RAPID_CONFIG.API_KEY) {
+            if(RAPID_CONFIG.API_KEY === "c8ff7efe43mshb615431c4a240fep1cca5ajsnd07a531f7ac1" || !RAPID_CONFIG.API_KEY) {
                 apiResponseBox.innerText = "• API Insight: RapidAPI key missing!";
                 return;
             }
@@ -200,7 +201,6 @@
             try {
                 apiResponseBox.innerText = "• API Insight: Data fetch ho raha hai...";
                 
-                // Request using the configured host
                 const response = await fetch(`https://${RAPID_CONFIG.API_HOST}/getPNRStatus/${encodeURIComponent(userQuery)}`, {
                     method: 'GET',
                     headers: {
@@ -210,9 +210,18 @@
                 });
 
                 const data = await response.json();
-                apiResponseBox.innerText = `• Data Received: Success! Ready to book.`;
+                
+                apiResponseBox.innerText = `• API Success: Data mil gaya!`;
+                
+                if(data && data.message) {
+                    trainDisplay.innerText = `• Status: ${data.message}`;
+                } else {
+                    trainDisplay.innerText = `• Response: ${JSON.stringify(data).substring(0, 40)}...`;
+                }
+
             } catch (error) {
-                apiResponseBox.innerText = "• API Insight: Connection successful, ready for booking.";
+                apiResponseBox.innerText = "• API Error: Server connect nahi ho paya.";
+                trainDisplay.innerText = `• Error details: ${error.message}`;
             }
         }
 
