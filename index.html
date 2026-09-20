@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ab Bolega India - Voice & Seat Availability Assistant</title>
+    <title>Ab Bolega India - Live Railway & Voice Assistant</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -28,7 +28,7 @@
                 </div>
                 <div>
                     <span class="font-black text-sm tracking-wider block leading-tight text-yellow-300 drop-shadow">AB BOLEGA INDIA</span>
-                    <span class="text-[8px] text-orange-200 block">Voice Booking & Seat Status</span>
+                    <span class="text-[8px] text-orange-200 block">Asli Live Rail Assistant</span>
                 </div>
             </div>
             <div class="flex items-center space-x-2 text-xs text-orange-200">
@@ -38,16 +38,16 @@
 
         <!-- Mode Selector Tabs -->
         <div class="grid grid-cols-2 gap-1 bg-slate-950 p-1 rounded-xl my-1 text-[10px] font-bold text-center">
-            <button id="tab-train" onclick="_0x2f8a('train')" class="py-1.5 rounded-lg bg-orange-600 text-white transition">Train & Seats (Voice)</button>
-            <button id="tab-pnr" onclick="_0x2f8a('pnr')" class="py-1.5 rounded-lg text-slate-400 hover:text-white transition">PNR Status</button>
+            <button id="tab-train" onclick="_0x2f8a('train')" class="py-1.5 rounded-lg bg-orange-600 text-white transition">Live Trains & Seats</button>
+            <button id="tab-pnr" onclick="_0x2f8a('pnr')" class="py-1.5 rounded-lg text-slate-400 hover:text-white transition">Live PNR Check</button>
         </div>
 
         <!-- Voice Booking Box -->
         <div class="bg-slate-900 text-slate-100 rounded-2xl p-3 shadow-lg border border-orange-400/40 text-center my-1">
             <h1 id="mode-title" class="text-[11px] font-black text-orange-400 tracking-wider leading-snug drop-shadow mb-0.5">
-                BOLKAR SEATS AUR TRAIN PATA KAREIN
+                BOLKAR LIVE TRAIN PATA KAREIN
             </h1>
-            <p id="mode-subtitle" class="text-[9px] text-yellow-400 font-bold mb-1">🎤 Mic dabayein aur route bolein (Jaise: Porbandar)</p>
+            <p id="mode-subtitle" class="text-[9px] text-yellow-400 font-bold mb-1">🎤 Mic dabayein aur destination bolein</p>
             
             <!-- Center Mic -->
             <div class="flex flex-col items-center justify-center my-2 relative">
@@ -68,17 +68,17 @@
                 </span>
             </div>
 
-            <!-- Live Status & Result Box (Paytm Style List) -->
+            <!-- Live Status & Result Box with Direct Official Links -->
             <div class="bg-slate-950 text-left rounded-xl p-2 text-[10px] space-y-1 border border-slate-800 max-h-52 overflow-y-auto">
                 <div class="text-orange-300 font-bold flex items-center justify-between">
-                    <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Uplabdh Trains & Seats:</span>
-                    <span class="text-[8px] text-yellow-400 font-normal">Dalal Mukt</span>
+                    <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Live Sarkari Link:</span>
+                    <span class="text-[8px] text-yellow-400 font-normal">100% Asli Data</span>
                 </div>
                 <div class="text-slate-300 text-[9px]" id="output-query">• Suna gaya: Kuch nahi</div>
                 
                 <div id="train-results-container" class="space-y-1.5 mt-1">
                     <div class="p-2 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">
-                        Mic dabakar train ka naam bolein...
+                        Mic dabakar train ya station ka naam bolein...
                     </div>
                 </div>
             </div>
@@ -106,15 +106,15 @@
             </div>
         </div>
 
-        <!-- PAYMENT BUTTON -->
+        <!-- DIRECT OFFICIAL GOVERNMENT RAILWAY LINK BUTTON -->
         <div>
-            <button onclick="_0x9c3f()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-3 rounded-xl shadow-lg flex items-center justify-center gap-2 text-xs tracking-wide transition active:scale-95">
-                <i class="fa-solid fa-shield-halved"></i> DALAL MUKT UPI BOOKING
-            </button>
+            <a href="https://www.enquiry.indianrail.gov.in/" target="_blank" class="w-full bg-blue-700 hover:bg-blue-600 text-white font-black py-2.5 px-3 rounded-xl shadow-lg flex items-center justify-center gap-2 text-xs tracking-wide transition active:scale-95 no-underline">
+                <i class="fa-solid fa-globe"></i> SIDHA LIVE NTES / IRCTC (SARKARI)
+            </a>
             
             <div class="flex items-center justify-center space-x-3 mt-1.5 bg-orange-700/60 py-1.5 px-2 rounded-xl border border-orange-600">
                 <div class="flex items-center space-x-1 bg-white px-1.5 py-0.5 rounded shadow-sm">
-                    <span class="text-[9px] font-bold text-slate-800">GPay • Paytm • PhonePe • BHIM</span>
+                    <span class="text-[9px] font-bold text-slate-800">Dalal Mukt • Secure • Direct Government Link</span>
                 </div>
             </div>
         </div>
@@ -122,29 +122,14 @@
         <!-- Bottom Footer -->
         <div class="flex justify-between items-center text-white text-[10px] font-bold px-1">
             <span>AB BOLEGA INDIA</span>
-            <span>SECURE v2.0</span>
+            <span>SECURE v3.0</span>
         </div>
 
     </div>
 
-    <!-- Ticket Summary Modal (Paytm Style Voice Booking Confirmation) -->
-    <div id="ticket-modal" class="hidden fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-3">
-        <div class="bg-slate-900 border border-orange-500 rounded-2xl w-full max-w-sm p-3 text-slate-100 space-y-2">
-            <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
-                <span class="text-orange-400 font-black text-xs"><i class="fa-solid fa-ticket"></i> VOICE BOOKING SUMMARY</span>
-                <button onclick="document.getElementById('ticket-modal').classList.add('hidden')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
-            </div>
-            <div id="modal-body" class="text-[10px] space-y-1.5 bg-slate-950 p-2 rounded-xl"></div>
-            <button onclick="alert('✨ Voice Booking Safal Rahi! UPI Payment Gateway Khul Raha Hai...'); document.getElementById('ticket-modal').classList.add('hidden');" class="w-full bg-green-600 hover:bg-green-500 py-2 rounded-xl font-bold text-xs text-white">
-                UPI PIN DALEIN & BOOK KAREIN
-            </button>
-        </div>
-    </div>
-
-    <!-- Encrypted & Obfuscated Multi-Train Logic -->
+    <!-- Encrypted & Obfuscated Live Logic -->
     <script>
-        const _0x5a1b=['train','pnr','BOLKAR SEATS AUR TRAIN PATA KAREIN','PNR STATUS CHECKER','SUN RAHE HAIN...','Suna gaya: ','• Suna gaya: ','19212 - Saurashtra Express','Porbandar ➔ Ahmedabad (21:00)','19571 - Rajkot Express','Porbandar ➔ Rajkot (07:15)','09206 - Special Passenger','Porbandar ➔ Mumbai (14:30)'];
-        let _0x3e8f='train',_0x12c4=false;function _0x2f8a(_0x6d21){_0x3e8f=_0x6d21;const _0x4f1a=document.getElementById('tab-train'),_0x5b2c=document.getElementById('tab-pnr'),_0x7a3e=document.getElementById('mode-title'),_0x8b4f=document.getElementById('mode-subtitle');document.getElementById('train-results-container').innerHTML=`<div class="p-2 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">Mic dabakar route bolein...</div>`;if(_0x6d21==='train'){_0x4f1a.className="py-1.5 rounded-lg bg-orange-600 text-white transition";_0x5b2c.className="py-1.5 rounded-lg text-slate-400 hover:text-white transition";_0x7a3e.innerText="BOLKAR SEATS AUR TRAIN PATA KAREIN";_0x8b4f.innerText="🎤 Mic dabayein aur bole: \"Porbandar\"";}else{_0x5b2c.className="py-1.5 rounded-lg bg-orange-600 text-white transition";_0x4f1a.className="py-1.5 rounded-lg text-slate-400 hover:text-white transition";_0x7a3e.innerText="PNR STATUS CHECKER";_0x8b4f.innerText="🎤 Apne 10 anko ka PNR number bolein";}}function _0x4b12(){const _0x9c2a=document.getElementById('mic-label'),_0x1a3b=document.getElementById('mic-icon'),_0x2b4c=document.getElementById('transcript-box');if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){alert("Google Chrome browser use karein!");return;}const _0x3c5d=window.SpeechRecognition||window.webkitSpeechRecognition;const _0x4d6e=new _0x3c5d();_0x4d6e.lang='hi-IN';if(!_0x12c4){_0x4d6e.start();}else{_0x4d6e.stop();return;}_0x4d6e.onstart=function(){_0x12c4=true;_0x9c2a.innerText="SUN RAHE HAIN...";_0x1a3b.classList.add('fa-spin');_0x2b4c.innerText="Bolte jaiye...";};_0x4d6e.onresult=function(_0x5e7f){const _0x6f80=_0x5e7f.results[0][0].transcript;_0x2b4c.innerText=`Suna gaya: "${_0x6f80}"`;document.getElementById('output-query').innerText=`• Suna gaya: "${_0x6f80}"`;if(_0x3e8f==='train'){document.getElementById('train-results-container').innerHTML=`<div class="space-y-1.5"><div class="bg-slate-900 p-2 rounded-lg border border-orange-400 flex justify-between items-center"><div><span class="font-bold text-orange-300 block text-[10px]">19212 - Saurashtra Express</span><div class="text-slate-400 text-[8px]">Porbandar ➔ Ahmedabad</div><span class="text-emerald-400 font-bold text-[8px]">🟢 Sleeper: 24 Seats Available</span></div><button onclick="_0x8c21('19212 - Saurashtra Express', 'Porbandar to Ahmedabad', 'Sleeper (24 Seats Available - ₹450)')" class="bg-orange-600 hover:bg-orange-500 text-white px-2 py-1.5 rounded font-bold text-[9px] shadow">Chunein</button></div><div class="bg-slate-900 p-2 rounded-lg border border-slate-800 flex justify-between items-center"><div><span class="font-bold text-orange-300 block text-[10px]">19571 - Rajkot Express</span><div class="text-slate-400 text-[8px]">Porbandar ➔ Rajkot</div><span class="text-yellow-400 font-bold text-[8px]">🟡 3AC: 12 Seats Available</span></div><button onclick="_0x8c21('19571 - Rajkot Express', 'Porbandar to Rajkot', '3AC (12 Seats Available - ₹780)')" class="bg-orange-600 hover:bg-orange-500 text-white px-2 py-1.5 rounded font-bold text-[9px] shadow">Chunein</button></div><div class="bg-slate-900 p-2 rounded-lg border border-slate-800 flex justify-between items-center"><div><span class="font-bold text-orange-300 block text-[10px]">09206 - Special Passenger</span><div class="text-slate-400 text-[8px]">Porbandar ➔ Mumbai</div><span class="text-emerald-400 font-bold text-[8px]">🟢 General: Available</span></div><button onclick="_0x8c21('09206 - Special Passenger', 'Porbandar to Mumbai', 'General (Available - ₹210)')" class="bg-orange-600 hover:bg-orange-500 text-white px-2 py-1.5 rounded font-bold text-[9px] shadow">Chunein</button></div></div>`;}else{document.getElementById('train-results-container').innerHTML=`<div class="bg-slate-900 p-2 rounded-lg border border-yellow-500 space-y-1 text-[9px]"><div class="text-yellow-400 font-bold">PNR Status Result:</div><div class="text-slate-300 bg-slate-950 p-1 rounded">PNR: ${_0x6f80.replace(/\D/g,'')}</div><div class="text-green-400 font-bold">Status: CONFIRMED (Coach: S4, Berth: 45)</div></div>`;}};_0x4d6e.onerror=function(){_0x2b4c.innerText="Awaz saaf nahi aayi, phir se bole.";_0x7f9a();};_0x4d6e.onend=function(){_0x7f9a();};}function _0x8c21(_0x1a,_0x2b,_0x3c){document.getElementById('modal-body').innerHTML=`Train: <b>${_0x1a}</b><br>Route: ${_0x2b}<br>Status: <span class="text-green-400">${_0x3c}</span><br><br><span class="text-yellow-400">🎤 Voice Booking Selected. UPI ke zariye bina dalal seedha payment karein.</span>`;document.getElementById('ticket-modal').classList.remove('hidden');}function _0x7f9a(){_0x12c4=false;document.getElementById('mic-label').innerHTML=`BOLNE KE LIYE DABAYEIN`;const _0x1a3b=document.getElementById('mic-icon');if(_0x1a3b)_0x1a3b.classList.remove('fa-spin');}function _0x9c3f(){alert("Pehle mic dabakar train aur seat chunein.");}
+        let _0x3e8f='train',_0x12c4=false;function _0x2f8a(_0x6d21){_0x3e8f=_0x6d21;const _0x4f1a=document.getElementById('tab-train'),_0x5b2c=document.getElementById('tab-pnr'),_0x7a3e=document.getElementById('mode-title'),_0x8b4f=document.getElementById('mode-subtitle');document.getElementById('train-results-container').innerHTML=`<div class="p-2 bg-slate-900 rounded border border-slate-800 text-[9px] text-slate-400 text-center">Mic dabakar route bolein...</div>`;if(_0x6d21==='train'){_0x4f1a.className="py-1.5 rounded-lg bg-orange-600 text-white transition";_0x5b2c.className="py-1.5 rounded-lg text-slate-400 hover:text-white transition";_0x7a3e.innerText="BOLKAR LIVE TRAIN PATA KAREIN";_0x8b4f.innerText="🎤 Mic dabayein aur destination bolein";}else{_0x5b2c.className="py-1.5 rounded-lg bg-orange-600 text-white transition";_0x4f1a.className="py-1.5 rounded-lg text-slate-400 hover:text-white transition";_0x7a3e.innerText="LIVE PNR STATUS CHECKER";_0x8b4f.innerText="🎤 Apna 10 anko ka PNR number bolein";}}function _0x4b12(){const _0x9c2a=document.getElementById('mic-label'),_0x1a3b=document.getElementById('mic-icon'),_0x2b4c=document.getElementById('transcript-box');if(!('webkitSpeechRecognition' in window)&&!('SpeechRecognition' in window)){alert("Google Chrome browser use karein!");return;}const _0x3c5d=window.SpeechRecognition||window.webkitSpeechRecognition;const _0x4d6e=new _0x3c5d();_0x4d6e.lang='hi-IN';if(!_0x12c4){_0x4d6e.start();}else{_0x4d6e.stop();return;}_0x4d6e.onstart=function(){_0x12c4=true;_0x9c2a.innerText="SUN RAHE HAIN...";_0x1a3b.classList.add('fa-spin');_0x2b4c.innerText="Bolte jaiye...";};_0x4d6e.onresult=function(_0x5e7f){const _0x6f80=_0x5e7f.results[0][0].transcript;_0x2b4c.innerText=`Suna gaya: "${_0x6f80}"`;document.getElementById('output-query').innerText=`• Suna gaya: "${_0x6f80}"`;if(_0x3e8f==='train'){document.getElementById('train-results-container').innerHTML=`<div class="space-y-1.5"><div class="bg-slate-900 p-2 rounded-lg border border-blue-500 flex justify-between items-center"><div><span class="font-bold text-blue-300 block text-[10px]">🌐 Live NTES Sarkari Portal</span><div class="text-slate-400 text-[8px]">Khoja gaya: "${_0x6f80}"</div><span class="text-green-400 font-bold text-[8px]">🟢 Asli Live Status Uplabdh</span></div><a href="https://www.enquiry.indianrail.gov.in/" target="_blank" class="bg-blue-600 hover:bg-blue-500 text-white px-2.5 py-1.5 rounded font-bold text-[9px] shadow no-underline">Dekhein</a></div></div>`;}else{document.getElementById('train-results-container').innerHTML=`<div class="bg-slate-900 p-2 rounded-lg border border-yellow-500 space-y-1 text-[9px]"><div class="text-yellow-400 font-bold">Live PNR Portal:</div><div class="text-slate-300 bg-slate-950 p-1 rounded">PNR: ${_0x6f80.replace(/\D/g,'')}</div><a href="https://www.indianrail.gov.in/enquiry/PNR/PnrEnquiry.html" target="_blank" class="block text-center bg-yellow-600 text-white py-1 rounded font-bold mt-1 no-underline">Asli PNR Status Check Karein</a></div>`;}};_0x4d6e.onerror=function(){_0x2b4c.innerText="Awaz saaf nahi aayi, phir se bole.";_0x7f9a();};_0x4d6e.onend=function(){_0x7f9a();};}function _0x7f9a(){_0x12c4=false;document.getElementById('mic-label').innerHTML=`BOLNE KE LIYE DABAYEIN`;const _0x1a3b=document.getElementById('mic-icon');if(_0x1a3b)_0x1a3b.classList.remove('fa-spin');}
     </script>
 </body>
 </html>
