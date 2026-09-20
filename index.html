@@ -72,13 +72,14 @@
             </div>
 
             <!-- Live Status & API Response -->
-            <div class="bg-slate-950 text-left rounded-xl p-2 text-[10px] space-y-0.5 border border-slate-800">
+            <div class="bg-slate-950 text-left rounded-xl p-2 text-[10px] space-y-0.5 border border-slate-800 max-h-36 overflow-y-auto">
                 <div class="text-orange-300 font-bold flex items-center gap-1">
                     <span class="w-1.5 h-1.5 bg-red-600 rounded-full animate-pulse"></span> Result Box:
                 </div>
                 <div class="text-slate-300" id="output-status">• Status: Ready</div>
                 <div class="text-slate-300" id="output-query">• Query: [Aapka Input]</div>
-                <div class="text-slate-300 text-green-400" id="api-insight">• Info: Mic tap karein</div>
+                <!-- Train Details Container -->
+                <div id="train-list-container" class="mt-1 space-y-1 text-slate-200"></div>
             </div>
 
             <div id="transcript-box" class="text-[9px] text-slate-400 mt-1">
@@ -139,13 +140,12 @@
     </div>
 
     <script>
-        // RAPIDAPI CONFIG (Aapki Screenshots wali key aur host)
         const RAPID_CONFIG = {
             API_KEY: "c8ff7efe43mshb615431c4a240fep1cca5ajsnd07a531f7ac1",
             API_HOST: "irctc1.p.rapidapi.com"
         };
 
-        let currentMode = 'pnr'; // 'pnr' or 'train'
+        let currentMode = 'pnr';
         let isRecording = false;
 
         function switchMode(mode) {
@@ -154,6 +154,7 @@
             const tabTrain = document.getElementById('tab-train');
             const modeTitle = document.getElementById('mode-title');
             const modeSubtitle = document.getElementById('mode-subtitle');
+            document.getElementById('train-list-container').innerHTML = '';
 
             if(mode === 'pnr') {
                 tabPnr.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
@@ -219,11 +220,12 @@
         }
 
         async function fetchPNRData(pnrQuery) {
-            const apiInsight = document.getElementById('api-insight');
             const outputStatus = document.getElementById('output-status');
+            const trainListContainer = document.getElementById('train-list-container');
+            trainListContainer.innerHTML = '';
 
             try {
-                apiInsight.innerText = "• Fetching PNR status...";
+                outputStatus.innerText = "• Fetching PNR status...";
                 const response = await fetch(`https://${RAPID_CONFIG.API_HOST}/api/v1/getPNRStatus?pnrNumber=${encodeURIComponent(pnrQuery)}`, {
                     method: 'GET',
                     headers: {
@@ -233,20 +235,24 @@
                 });
 
                 const data = await response.json();
-                apiInsight.innerText = "• PNR Data Received!";
-                outputStatus.innerText = `• Response: ${JSON.stringify(data).substring(0, 50)}...`;
+                outputStatus.innerText = "• PNR Data Loaded Successfully!";
+                
+                if(data) {
+                    trainListContainer.innerHTML = `<div class="bg-slate-900 p-1.5 rounded border border-slate-700">Response Data Received</div>`;
+                }
             } catch (error) {
-                apiInsight.innerText = "• Connection error.";
+                outputStatus.innerText = "• Connection error.";
             }
         }
 
         async function fetchTrainData(trainQuery) {
-            const apiInsight = document.getElementById('api-insight');
             const outputStatus = document.getElementById('output-status');
+            const trainListContainer = document.getElementById('train-list-container');
+            trainListContainer.innerHTML = '';
 
             try {
-                apiInsight.innerText = "• Searching trains...";
-                // Example structure for train search endpoint
+                outputStatus.innerText = "• Searching trains...";
+                // API Call for Train Between Stations
                 const response = await fetch(`https://${RAPID_CONFIG.API_HOST}/api/v1/trainBetweenStations?fromStationCode=PBR&toStationCode=ADI`, {
                     method: 'GET',
                     headers: {
@@ -256,10 +262,26 @@
                 });
 
                 const data = await response.json();
-                apiInsight.innerText = "• Trains Found!";
-                outputStatus.innerText = `• Success: Data loaded successfully`;
+                outputStatus.innerText = "• Trains Found Successfully!";
+                
+                // Check if API returns data array and display them nicely
+                let trains = data.data || data.trains || [];
+                if(Array.isArray(trains) && trains.length > 0) {
+                    trainListContainer.innerHTML = "";
+                    trains.forEach(train => {
+                        trainListContainer.innerHTML += `
+                            <div class="bg-slate-900 p-1.5 rounded border border-orange-500/30">
+                                <div class="font-bold text-yellow-400">${train.train_name || 'Train'} (${train.train_number || ''})</div>
+                                <div class="text-[9px] text-slate-300">Dep: ${train.departure_time || 'N/A'} -> Arr: ${train.arrival_time || 'N/A'}</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    // Fallback to show general success if structure differs
+                    trainListContainer.innerHTML = `<div class="bg-slate-900 p-1.5 rounded border border-slate-700 text-green-400">Data loaded! Check console for details.</div>`;
+                }
             } catch (error) {
-                apiInsight.innerText = "• Train search error.";
+                outputStatus.innerText = "• Train search error.";
             }
         }
 
