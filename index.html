@@ -42,7 +42,7 @@
         <!-- Mode Selector Tabs -->
         <div class="grid grid-cols-2 gap-1 bg-slate-950 p-1 rounded-xl my-1 text-[10px] font-bold text-center">
             <button id="tab-pnr" onclick="switchMode('pnr')" class="py-1.5 rounded-lg bg-orange-600 text-white transition">PNR Status</button>
-            <button id="tab-train" onclick="switchMode('train')" class="py-1.5 rounded-lg text-slate-400 hover:text-white transition">Train Search</button>
+            <button id="tab-train" onclick="switchMode('train')" class="py-1.5 rounded-lg text-slate-400 hover:text-white transition">Train / Route Search</button>
         </div>
 
         <!-- Voice Booking Box -->
@@ -164,8 +164,8 @@
             } else {
                 tabTrain.className = "py-1.5 rounded-lg bg-orange-600 text-white transition";
                 tabPnr.className = "py-1.5 rounded-lg text-slate-400 hover:text-white transition";
-                modeTitle.innerText = "TRAIN SEARCH";
-                modeSubtitle.innerText = "🎤 Jaise: Porbandar se Mumbai";
+                modeTitle.innerText = "TRAIN SEARCH & INFO";
+                modeSubtitle.innerText = "🎤 Train Number ya Route bolein (jaise: 19269)";
             }
         }
 
@@ -205,7 +205,7 @@
                 if(currentMode === 'pnr') {
                     fetchPNRData(speechToText);
                 } else {
-                    fetchTrainData(speechToText);
+                    fetchSmartTrainData(speechToText);
                 }
             };
 
@@ -242,26 +242,45 @@
             }
         }
 
-        async function fetchTrainData(query) {
+        async function fetchSmartTrainData(query) {
             const outputStatus = document.getElementById('output-status');
             const container = document.getElementById('train-list-container');
             container.innerHTML = '';
 
-            let text = query.toLowerCase();
-            let fromStation = "PBR"; // Default Porbandar
-            let toStation = "ADI";   // Default Ahmedabad
+            // Check if user spoke a train number (e.g., 5-digit number)
+            let matchNum = query.match(/\d{5}/);
+            
+            if (matchNum) {
+                let trainNo = matchNum[0];
+                try {
+                    outputStatus.innerText = `• Fetching details for Train ${trainNo}...`;
+                    const response = await fetch(`https://${RAPID_CONFIG.API_HOST}/api/v1/searchTrain?trainNo=${trainNo}`, {
+                        method: 'GET',
+                        headers: {
+                            'x-rapidapi-key': RAPID_CONFIG.API_KEY,
+                            'x-rapidapi-host': RAPID_CONFIG.API_HOST
+                        }
+                    });
+                    const data = await response.json();
+                    outputStatus.innerText = "• Train Details Loaded!";
+                    container.innerHTML = `<div class="bg-slate-900 p-1.5 rounded border border-green-500/40 text-[9px] text-green-300 max-h-28 overflow-y-auto"><pre style="white-space: pre-wrap; word-break: break-all;">${JSON.stringify(data, null, 2)}</pre></div>`;
+                    return;
+                } catch (e) {
+                    // Fallback if trainNo param fails
+                }
+            }
 
-            // Smart keyword mapping from speech input
+            // Fallback to route search (Porbandar to Mumbai/Ahmedabad)
+            let text = query.toLowerCase();
+            let fromStation = "PBR";
+            let toStation = "ADI";
+
             if(text.includes("mumbai") || text.includes("bombay")) toStation = "BCT";
             else if(text.includes("rajkot")) toStation = "RJT";
             else if(text.includes("delhi")) toStation = "NDLS";
-            else if(text.includes("ahmedabad")) toStation = "ADI";
-
-            if(text.includes("rajkot se")) fromStation = "RJT";
 
             try {
                 outputStatus.innerText = `• Searching Trains (${fromStation} to ${toStation})...`;
-                
                 const response = await fetch(`https://${RAPID_CONFIG.API_HOST}/api/v1/searchTrain?fromStationCode=${fromStation}&toStationCode=${toStation}`, {
                     method: 'GET',
                     headers: {
@@ -272,12 +291,7 @@
 
                 const data = await response.json();
                 outputStatus.innerText = "• Train Search Successful!";
-                
-                container.innerHTML = `
-                    <div class="bg-slate-900 p-1.5 rounded border border-orange-500/40 text-[9px] text-green-300 max-h-28 overflow-y-auto">
-                        <pre style="white-space: pre-wrap; word-break: break-all;">${JSON.stringify(data, null, 2)}</pre>
-                    </div>
-                `;
+                container.innerHTML = `<div class="bg-slate-900 p-1.5 rounded border border-orange-500/40 text-[9px] text-green-300 max-h-28 overflow-y-auto"><pre style="white-space: pre-wrap; word-break: break-all;">${JSON.stringify(data, null, 2)}</pre></div>`;
             } catch (error) {
                 outputStatus.innerText = "• Train search error.";
             }
